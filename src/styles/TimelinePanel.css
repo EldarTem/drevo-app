@@ -1,0 +1,10 @@
+.swiper-slide-center {
+  transform: scale(0.95);
+  transition: transform 0.3s ease-in-out;
+}
+.swiper-slide-active img {
+  transform: scale(1);
+}
+.vkuiPanel__in {
+  background: #ffffff !important;
+}
