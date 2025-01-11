@@ -170,3 +170,61 @@
 .vkuiModalPage__content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.profile-relation {
+  font-size: 14px;
+  color: gray;
+}
+
+.profile-details {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.section-title {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.photo-grid {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.photo-item {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.relative-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.relative-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.relative-relation {
+  font-size: 14px;
+  color: gray;
+}

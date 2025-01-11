@@ -8,4 +8,6 @@ export interface RelativeData {
   father?: number;
   mother?: number;
   pids?: number[];
+  birthYear?: number;
+  photo?: string;
 }

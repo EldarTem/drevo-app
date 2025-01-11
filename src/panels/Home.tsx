@@ -57,8 +57,9 @@ export const Home: FC<HomeProps> = ({ id, fetchedUser, openPopup }) => {
             onClick={openPopup}
             style={{ marginTop: 10 }}
           >
-            Добавление родственника
+            Добавление матери
           </Button>
+          
         </Div>
       </Group>
     </Panel>

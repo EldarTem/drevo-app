@@ -1,52 +1,60 @@
-import { FC, useEffect, useRef } from "react";
-import { Panel, PanelHeader } from "@vkontakte/vkui";
-import { RelativeData } from "../types";
+import { useState, useEffect, useRef } from "react";
+import FamilyTree from "@balkangraph/familytree.js";
+import "../styles/treeStyles.css"; // ваши стили, если нужны
+import RelativeProfileModal from "../components/RelativeProfileModal";
 
-interface MyTreePanelProps {
-  id: string;
-  onSelectRelative: (id: number) => void;
-  relativesData: RelativeData[];
-}
-
-export const MyTreePanel: FC<MyTreePanelProps> = ({
-  id,
-  onSelectRelative,
-  relativesData,
-}) => {
-  const treeContainer = useRef<HTMLDivElement>(null);
+export function MyTreePanel() {
+  const treeRef = useRef<HTMLDivElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (treeContainer.current && window.FamilyTree) {
-      const options: FamilyTreeOptions = {
-        data: relativesData.map((relative) => ({
-          id: relative.id,
-          name: relative.name,
-          parentId: relative.father || relative.mother,
-        })),
-        nodeBinding: {
-          field_0: "name",
-        },
-      };
+    if (!treeRef.current) return;
 
-      const tree: FamilyTreeInstance = new window.FamilyTree(
-        treeContainer.current,
-        options
-      );
+    // Инициализируем дерево
+    const family = new FamilyTree(treeRef.current, {
+      nodes: [
+        { id: 1, name: "Person #1" },
+        { id: 2, fid: 1, name: "Person #2" },
+      ],
+      nodeBinding: {
+        field_0: "name",
+      },
+      // Можно убрать лишние настройки, если не нужны
+      mode: "light",
+      toolbar: { layout: false, fit: false, zoom: false },
+    });
 
-      tree.on("nodeClick", (node: FamilyTreeNode) => {
-        onSelectRelative(node.id);
-      });
+    // При клике на узел
+    family.on("click", () => {
+      console.log("Node clicked - open the modal");
+      setIsModalOpen(true);
+    });
 
-      return () => {
-        tree.destroy();
-      };
-    }
-  }, [relativesData, onSelectRelative]);
+    // Убираем дерево при размонтировании
+    return () => {
+      family.destroy();
+    };
+  }, []);
 
   return (
-    <Panel id={id}>
-      <PanelHeader>Древо родственников</PanelHeader>
-      <div ref={treeContainer} style={{ width: "100%", height: "100vh" }}></div>
-    </Panel>
+    <div style={{ width: "100%", height: "100%" }}>
+      {/* Контейнер для дерева */}
+      <div
+        ref={treeRef}
+        style={{
+          width: "100%",
+          height: "600px",
+          border: "1px solid #ccc",
+        }}
+      />
+
+      {/* Если isModalOpen === true, показываем модалку */}
+      {isModalOpen && (
+        <RelativeProfileModal
+          id="relative-modal"
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+    </div>
   );
-};
+}

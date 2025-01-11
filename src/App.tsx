@@ -14,7 +14,7 @@ import { useActiveVkuiLocation } from "@vkontakte/vk-mini-apps-router";
 import { Home, Persik, MyTreePanel, TimelinePanel } from "./panels";
 import { DEFAULT_VIEW_PANELS } from "./routes";
 import NavigationBar from "./components/NavigationBar";
-import AddMotherModal from "./components/AddMother";
+import AddMotherModal from "./components/RelativeProfileModal";
 import RelativeModal from "./components/RelativeModal";
 import { RelativeData } from "./types";
 
@@ -83,7 +83,7 @@ const App: React.FC = () => {
   }, []);
 
   const openAddMotherModal = () => {
-    setActiveModal("add-mother-modal");
+    setActiveModal("add-modal");
   };
 
   const closeModal = () => {
@@ -102,7 +102,7 @@ const App: React.FC = () => {
 
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={closeModal}>
-      <AddMotherModal id="add-mother-modal" onClose={closeModal} />
+      <AddMotherModal id="add-modal" onClose={closeModal} />
       <RelativeModal
         id="relative-info"
         onClose={closeModal}

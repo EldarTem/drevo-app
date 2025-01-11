@@ -1,74 +1,56 @@
-.chartContainer {
-  width: 100%;
-  height: 600px;
-  border: 1px solid #ccc;
-  position: relative;
+/* Узловая форма — здесь мы можем переопределить fill, stroke и т.д.
+   Но сам путь (path) мы объявили в node=..., поэтому "d" остаётся в TSX.
+   Класс node-shape (см. node="<path class='node-shape' ...>") */
+.node-shape {
+  fill: #fff; /* Белый фон */
+  stroke: rgba(68, 123, 186, 1); /* Синий обвод */
+  stroke-width: 2px;
 }
 
-.node-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 180px;
+/* Изображение-аватар, если хотим какие-то общие стили */
+.avatar-img {
+  /* Например, скруглённая рамка вокруг */
+  /* stroke: #ddd; stroke-width: 1px; */
+  /* или shadow — на ваше усмотрение */
 }
 
-.node-photo-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
+/* Иконка камеры поверх аватара */
+.camera-icon {
+  /* Можно вручную сместить, если нужно */
+  /* opacity: 0.8; */
 }
 
-.node-photo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+/* Иконка карандаша (edit-icon) в правом верхнем углу */
+.edit-icon {
+  /* cursor: pointer; */
+  /* opacity: 0.7; */
 }
 
-.node-photo.placeholder {
-  width: 50px;
-  height: 50px;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Кнопка «+» внизу. На скриншоте это синие линии, 
+     но у нас реализовано как «выемка» в path. 
+     Если хотите настоящую иконку, придётся добавить её 
+     в nodeTemplate или defs. */
+
+/* Текст имени, фамилии */
+.user-name {
+  font-family: sans-serif;
+  font-size: 16px;
+  fill: #333; /* Тёмный цвет текста */
+  font-weight: 600; /* Полужирный */
 }
 
-.node-info {
-  text-align: center;
+/* Текст года */
+.user-year {
+  font-family: sans-serif;
+  font-size: 14px;
+  fill: #666;
+  font-weight: 400;
 }
 
-.node-name {
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.node-birth {
-  color: #666;
-  font-size: 12px;
-}
-
-.node-actions {
-  margin-top: 8px;
-}
-
-.node-add-btn {
-  background-color: #4caf50;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.node-add-btn:hover {
-  background-color: #45a049;
-}
+/* Если хотите, чтобы для всех узлов 
+     задний фон SVG был серым, можно так: */
+/*
+  #treeRef>svg {
+    background-color: #f0f0f0;
+  }
+  */
