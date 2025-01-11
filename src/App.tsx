@@ -14,8 +14,7 @@ import { useActiveVkuiLocation } from "@vkontakte/vk-mini-apps-router";
 import { Home, Persik, MyTreePanel, TimelinePanel } from "./panels";
 import { DEFAULT_VIEW_PANELS } from "./routes";
 import NavigationBar from "./components/NavigationBar";
-import AddMotherModal from "./components/RelativeProfileModal";
-import RelativeModal from "./components/RelativeModal";
+import RelativeProfileModal from "./components/RelativeProfileModal";
 import { RelativeData } from "./types";
 
 const relativesData: RelativeData[] = [
@@ -51,8 +50,31 @@ const App: React.FC = () => {
     <ScreenSpinner size="large" />
   );
   const [activeModal, setActiveModal] = useState<string | null>(null);
-
   const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const handleSelectRelative = (nodeId: number) => {
+    console.log("Выбран родственник с ID:", nodeId);
+    setSelectedId(nodeId);
+    setActiveModal("relative-profile");
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
+
+  const selectedRelative = useMemo(() => {
+    return relativesData.find((relative) => relative.id === selectedId) || null;
+  }, [selectedId]);
+
+  const modal = (
+    <ModalRoot activeModal={activeModal} onClose={closeModal}>
+      <RelativeProfileModal
+        id="relative-profile"
+        onClose={closeModal}
+        selectedRelative={selectedRelative}
+      />
+    </ModalRoot>
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -64,13 +86,11 @@ const App: React.FC = () => {
             last_name: "Пользователь",
           };
           setUser(user);
-          console.log("Заглушка пользователя установлена:", user);
         } else {
           const user = (await bridge.send(
             "VKWebAppGetUserInfo",
             {}
           )) as Partial<UserInfo>;
-          console.log("Полученные данные пользователя:", user);
           setUser(user);
         }
       } catch (error) {
@@ -82,35 +102,6 @@ const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const openAddMotherModal = () => {
-    setActiveModal("add-modal");
-  };
-
-  const closeModal = () => {
-    setActiveModal(null);
-  };
-
-  const handleSelectRelative = (relativeId: number) => {
-    console.log("Выбран родственник с ID:", relativeId);
-    setSelectedId(relativeId);
-    setActiveModal("relative-info");
-  };
-
-  const selectedRelative = useMemo(() => {
-    return relativesData.find((relative) => relative.id === selectedId) || null;
-  }, [selectedId]);
-
-  const modal = (
-    <ModalRoot activeModal={activeModal} onClose={closeModal}>
-      <AddMotherModal id="add-modal" onClose={closeModal} />
-      <RelativeModal
-        id="relative-info"
-        onClose={closeModal}
-        selectedRelative={selectedRelative}
-      />
-    </ModalRoot>
-  );
-
   return (
     <ConfigProvider>
       <AdaptivityProvider>
@@ -118,16 +109,11 @@ const App: React.FC = () => {
           <SplitLayout popout={popout} modal={modal}>
             <SplitCol>
               <View activePanel={activePanel}>
-                <Home
-                  id={DEFAULT_VIEW_PANELS.HOME}
-                  fetchedUser={fetchedUser}
-                  openPopup={openAddMotherModal}
-                />
+                <Home id={DEFAULT_VIEW_PANELS.HOME} fetchedUser={fetchedUser} />
                 <Persik id={DEFAULT_VIEW_PANELS.PERSIK} />
                 <MyTreePanel
                   id={DEFAULT_VIEW_PANELS.MY_TREE}
                   onSelectRelative={handleSelectRelative}
-                  relativesData={relativesData}
                 />
                 <TimelinePanel id={DEFAULT_VIEW_PANELS.TIMELINE} />
               </View>

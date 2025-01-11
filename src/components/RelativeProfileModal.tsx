@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ModalPage, Group, Div, Avatar } from "@vkontakte/vkui";
 import {
   Icon16Add,
@@ -10,18 +10,27 @@ import {
   Icon28QrCodeOutline,
   Icon16Cancel,
 } from "@vkontakte/icons";
-import "../styles/RelativeProfileModal.css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import "../styles/RelativeProfileModal.css";
 
 interface RelativeProfileModalProps {
   id: string;
   onClose: () => void;
 }
 
-const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
+const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
+  id,
+  onClose,
+}) => {
+  const [isRelativesVisible, setIsRelativesVisible] = useState(true);
+
+  const toggleRelativesVisibility = () => {
+    setIsRelativesVisible((prev) => !prev);
+  };
   const relatives = [
     {
       imageUrl:
@@ -87,9 +96,8 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
   ];
 
   return (
-    <ModalPage id={id} settlingHeight={80}>
+    <ModalPage id={id} onClose={onClose} settlingHeight={80}>
       <Group>
-        {/* Верхний блок */}
         <Div className="header-icons">
           <Icon28ViewOutline />
           <Icon28QrCodeOutline />
@@ -106,6 +114,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
             <span className="profile-status">Ваш прадед</span>
           </div>
         </Div>
+
         <Div className="profile-details">
           <p className="profile-details-date">
             Дата и место рождения: <br />
@@ -116,6 +125,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
             <span>15 сен. 1995 - Москва</span>
           </p>
         </Div>
+
         <Div className="buttons">
           <button
             className="edit-button"
@@ -150,24 +160,36 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
         <Div className="section">
           <div className="section-group">
             <h2 className="section-title">Близкие родственники</h2>
-            <div className="dropdown-btn">
-              <Icon16DropdownFlipped fill="#5181B8" />
+            <div className="dropdown-btn" onClick={toggleRelativesVisibility}>
+              <Icon16DropdownFlipped
+                fill="#5181B8"
+                style={{
+                  transform: isRelativesVisible
+                    ? "rotate(180deg)"
+                    : "rotate(0deg)",
+                  transition: "transform 0.3s ease",
+                }}
+              />
             </div>
           </div>
-          {relatives.map((relative, index) => (
-            <div className="relative-card" key={index}>
-              <Avatar size={48} src={relative.imageUrl} noBorder />
-
-              <div>
-                <h4 className="relative-card-name">{relative.name}</h4>
-                <span className="relative-card-status">
-                  {relative.relation}
-                </span>
+          <div
+            className={`relative-cards-container ${
+              isRelativesVisible ? "open" : "closed"
+            }`}
+          >
+            {relatives.map((relative, index) => (
+              <div className="relative-card" key={index}>
+                <Avatar size={48} src={relative.imageUrl} noBorder />
+                <div>
+                  <h4 className="relative-card-name">{relative.name}</h4>
+                  <span className="relative-card-status">
+                    {relative.relation}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </Div>
-
         {/* Биография */}
         <Div className="section">
           <div className="section-group">
@@ -177,12 +199,8 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
             </div>
           </div>
           <p className="section-text">
-            Стал известным после того, как мно- гочисленные фотографии с его
-            участием стали интернет-мемом. Андраш появлялся и исчезал в
-            индустрии фотографий и рекламы как модель после раскрытия реального
-            имени. На поприще стоковых фотографий привлек к себе внимание ещё в
-            2011 году, а в культуре мемов начал называться как «Гарольд, Читать
-            полностью
+            Стал известным после того, как многочисленные фотографии с его
+            участием стали интернет-мемом...
           </p>
           <a className="section-link" href="#">
             Читать полностью <Icon16ChevronOutline fill="#9EB4C8" />
@@ -194,7 +212,6 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({ id }) => {
           <div className="section-group">
             <h2 className="section-title">События из жизни</h2>
           </div>
-
           <button className="life-event-add">Добавить событие</button>
           {lifeEvents.map((event, index) => (
             <div className="life-event" key={index}>

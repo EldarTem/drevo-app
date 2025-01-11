@@ -181,6 +181,23 @@
   color: #6f7985;
   font-size: 13px;
 }
+.relative-cards-container {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease, padding 0.5s ease;
+  padding: 0;
+}
+
+.relative-cards-container.open {
+  max-height: 500px;
+  padding: 10px 0;
+}
+
+.relative-cards-container.closed {
+  max-height: 0;
+  padding: 0;
+}
+
 .life-event {
   display: flex;
   flex-direction: column;
