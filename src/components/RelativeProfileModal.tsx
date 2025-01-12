@@ -20,6 +20,7 @@ import "../styles/RelativeProfileModal.css";
 interface RelativeProfileModalProps {
   id: string;
   onClose: () => void;
+  selectedRelative?: RelativeProfileModalProps | null;
 }
 
 const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
@@ -96,7 +97,12 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
   ];
 
   return (
-    <ModalPage id={id} onClose={onClose} settlingHeight={80}>
+    <ModalPage
+      id={id}
+      onClose={onClose}
+      settlingHeight={80}
+      className="relative-profile"
+    >
       <Group>
         <Div className="header-icons">
           <Icon28ViewOutline />

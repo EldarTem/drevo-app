@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ModalPage,
-  ModalPageHeader,
   Input,
   Radio,
   RadioGroup,
@@ -15,25 +14,21 @@ import {
 import { Icon24Add, Icon48Camera } from "@vkontakte/icons";
 import "../styles/appPanel.css";
 
-interface AddMotherModalProps {
+interface EditMotherModal {
   id: string;
   onClose: () => void;
 }
 
-export const AddMotherModal: React.FC<AddMotherModalProps> = ({
-  id,
-  onClose,
-}) => {
+export const EditMotherModal: React.FC<EditMotherModal> = ({ id, onClose }) => {
   const [isAlive, setIsAlive] = useState(true);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoURL, setPhotoURL] = useState<string | undefined>(undefined);
-  const [firstName, setFirstName] = useState<string>("Александра");
-  const [patronymic, setPatronymic] = useState<string>("Петровна");
-  const [maidenName, setMaidenName] = useState<string>("Журавлёва");
+  const [firstName, setFirstName] = useState<string>("Гарольд");
+  const [patronymic, setPatronymic] = useState<string>("Иванов");
   const [dayOfBirth, setDayOfBirth] = useState<string>("");
   const [monthOfBirth, setMonthOfBirth] = useState<string>("");
   const [yearOfBirth, setYearOfBirth] = useState<string>("");
-  const [marriedName, setMarriedName] = useState<string>("Кузьменко");
+  const [marriedName, setMarriedName] = useState<string>("Иванович");
   const [placeOfBirth, setPlaceOfBirth] = useState<string>("Архангельск");
   const [dayOfDeath, setDayOfDeath] = useState<string>("");
   const [monthOfDeath, setMonthOfDeath] = useState<string>("");
@@ -97,7 +92,6 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
       isAlive,
       firstName,
       patronymic,
-      maidenName,
       dateOfBirth: fullDateOfBirth,
       marriedName,
       placeOfBirth,
@@ -133,71 +127,18 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   );
 
   return (
-    <ModalPage
-      id={id}
-      settlingHeight={80}
-      header={
-        <ModalPageHeader>Добавить мать для Алексея Иванова</ModalPageHeader>
-      }
-      className="add-mother-modal"
-    >
+    <ModalPage id={id} settlingHeight={80} className="add-mother-modal">
       <form onSubmit={handleSubmit}>
         <Group>
           <Div className="photo-group">
-            <Avatar size={113} src={photoURL}>
-              {!photo && (
-                <Icon48Camera className="camera-icon" width={48} height={48} />
-              )}
-            </Avatar>
-
+            <Avatar
+              size={113}
+              src="../src/assets/img/image1.png"
+              alt="Фото"
+            ></Avatar>
             <Div className="upload-input-wrapper">
-              <Div className="input-label">Загрузить фото</Div>
-              <Div
-                className="upload-input"
-                role="button"
-                tabIndex={0}
-                onClick={() => {
-                  const fileInput = document.getElementById(
-                    "photo-upload-input"
-                  ) as HTMLInputElement | null;
-                  if (fileInput) {
-                    fileInput.click();
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    const fileInput = document.getElementById(
-                      "photo-upload-input"
-                    ) as HTMLInputElement | null;
-                    if (fileInput) {
-                      fileInput.click();
-                    }
-                  }
-                }}
-              >
-                <Div className="upload-status">
-                  {photo ? photo.name : "Фото не выбрано"}
-                </Div>
-                {photo ? (
-                  <Icon24Add className="add-icon" />
-                ) : (
-                  <Icon48Camera
-                    className="camera-icon"
-                    width={24}
-                    height={24}
-                  />
-                )}
-              </Div>
-              <input
-                id="photo-upload-input"
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                style={{ display: "none" }}
-                onChange={handlePhotoUpload}
-              />
-              <Div className="input-label">
-                Поддерживаемые форматы JPG, PNG до 10МБ
-              </Div>
+              <Div className="user-name-modal">Гароль Иванович</Div>
+              <Div className="user-relation-modal">Ваш прадед</Div>
             </Div>
           </Div>
         </Group>
@@ -270,15 +211,9 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
               </Div>
             </Div>
             <Div className="column">
-              <Div className="input-label">Девичья фамилия</Div>
+              <Div className="input-label">Фамилия </Div>
               <Input
-                placeholder="Введите девичью фамилию"
-                value={maidenName}
-                onChange={(e) => setMaidenName(e.target.value)}
-              />
-              <Div className="input-label">Фамилия после замужества</Div>
-              <Input
-                placeholder="Введите фамилию после замужества"
+                placeholder="Введите фамилию"
                 value={marriedName}
                 onChange={(e) => setMarriedName(e.target.value)}
               />
@@ -385,7 +320,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
               mode="primary"
               className="submot-popup"
             >
-              Добавить
+              Сохранить
             </Button>
           </Div>
         </Group>
@@ -394,4 +329,4 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   );
 };
 
-export default AddMotherModal;
+export default EditMotherModal;

@@ -179,5 +179,5 @@ export function MyTreePanel({
     };
   }, [onSelectRelative, onEditNode, onAddNode]);
 
-  return <div ref={treeRef} style={{ width: "100%", height: "800px" }} />;
+  return <div ref={treeRef} style={{ width: "100%", height: "100%" }} />;
 }

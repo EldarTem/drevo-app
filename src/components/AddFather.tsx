@@ -15,25 +15,24 @@ import {
 import { Icon24Add, Icon48Camera } from "@vkontakte/icons";
 import "../styles/appPanel.css";
 
-interface AddMotherModalProps {
+interface AddFatherModalProps {
   id: string;
   onClose: () => void;
 }
 
-export const AddMotherModal: React.FC<AddMotherModalProps> = ({
+export const AddFatherModal: React.FC<AddFatherModalProps> = ({
   id,
   onClose,
 }) => {
   const [isAlive, setIsAlive] = useState(true);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoURL, setPhotoURL] = useState<string | undefined>(undefined);
-  const [firstName, setFirstName] = useState<string>("Александра");
-  const [patronymic, setPatronymic] = useState<string>("Петровна");
-  const [maidenName, setMaidenName] = useState<string>("Журавлёва");
+  const [firstName, setFirstName] = useState<string>("Гарольд");
+  const [patronymic, setPatronymic] = useState<string>("Иванов");
   const [dayOfBirth, setDayOfBirth] = useState<string>("");
   const [monthOfBirth, setMonthOfBirth] = useState<string>("");
   const [yearOfBirth, setYearOfBirth] = useState<string>("");
-  const [marriedName, setMarriedName] = useState<string>("Кузьменко");
+  const [marriedName, setMarriedName] = useState<string>("Иванович");
   const [placeOfBirth, setPlaceOfBirth] = useState<string>("Архангельск");
   const [dayOfDeath, setDayOfDeath] = useState<string>("");
   const [monthOfDeath, setMonthOfDeath] = useState<string>("");
@@ -97,7 +96,6 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
       isAlive,
       firstName,
       patronymic,
-      maidenName,
       dateOfBirth: fullDateOfBirth,
       marriedName,
       placeOfBirth,
@@ -137,7 +135,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
       id={id}
       settlingHeight={80}
       header={
-        <ModalPageHeader>Добавить мать для Алексея Иванова</ModalPageHeader>
+        <ModalPageHeader>Добавить отца для Алексея Иванова</ModalPageHeader>
       }
       className="add-mother-modal"
     >
@@ -270,13 +268,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
               </Div>
             </Div>
             <Div className="column">
-              <Div className="input-label">Девичья фамилия</Div>
-              <Input
-                placeholder="Введите девичью фамилию"
-                value={maidenName}
-                onChange={(e) => setMaidenName(e.target.value)}
-              />
-              <Div className="input-label">Фамилия после замужества</Div>
+              <Div className="input-label">Фамилия</Div>
               <Input
                 placeholder="Введите фамилию после замужества"
                 value={marriedName}
@@ -295,10 +287,10 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
         <Div>
           <RadioGroup onChange={handleRadioChange} className="radiodiv">
             <Radio value="alive" checked={isAlive}>
-              Жива
+              Жив
             </Radio>
             <Radio value="deceased" checked={!isAlive}>
-              Умерла
+              Умер
             </Radio>
           </RadioGroup>
         </Div>
@@ -394,4 +386,4 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   );
 };
 
-export default AddMotherModal;
+export default AddFatherModal;

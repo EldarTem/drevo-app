@@ -1,0 +1,83 @@
+.modal-popup .vkuiModalCard__in {
+  max-width: 630px !important; /* Устанавливаем ширину */
+  width: 90%; /* Для адаптивности */
+}
+.modal-popup .vkuiModalCardBase__header {
+  font-size: 28px;
+}
+.modal-popup .vkuiModalCardBase__container {
+  padding: 30px 90px !important;
+}
+.modal-input-two {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.modal-input-two-input {
+  max-width: 249px;
+}
+
+.button-modal {
+  background-color: #447bba !important;
+  padding-left: 27px;
+  padding-right: 27px;
+  width: 65%;
+}
+
+.button-modal-two {
+  color: #447bba !important;
+  background-color: #fff !important;
+  border: solid #447bba;
+}
+.button-modal-three {
+  color: #447bba !important;
+  background-color: #fff !important;
+  border: solid #447bba;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.modal-popup .vkuiModalDismissButton {
+  right: 0px;
+}
+
+.modal-popup-s .vkuiModalCard__in {
+  max-width: 450px !important; /* Устанавливаем ширину */
+  width: 90%; /* Для адаптивности */
+}
+
+.modal-popup-s .vkuiModalCardBase__header {
+  font-size: 28px;
+  text-align: left;
+  padding: 0;
+}
+.modal-popup-s .modal-input-two {
+  padding: 0;
+  margin-top: 20px;
+}
+
+.modal-popup-s .button-modal {
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 65%;
+}
+.radiodiv-modal {
+  margin-top: 20px;
+  fill: #5181b8;
+}
+.radiodiv-modal label {
+  padding: 0;
+}
+
+.modal-popup-s .vkuiModalDismissButton {
+  right: 0px;
+}
+.vkuiInternalTabbar {
+  display: flex;
+  justify-content: center;
+}
+.tabbar-div {
+  width: 50%;
+  display: flex;
+}

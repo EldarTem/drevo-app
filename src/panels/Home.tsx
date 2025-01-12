@@ -16,9 +16,32 @@ import { NavIdProps } from "@vkontakte/vkui";
 export interface HomeProps extends NavIdProps {
   fetchedUser?: Partial<UserInfo>;
   openPopup?: () => void;
+
+  openAddMother?: () => void;
 }
 
-export const Home: FC<HomeProps> = ({ id, fetchedUser, openPopup }) => {
+export interface HomeProps extends NavIdProps {
+  fetchedUser?: Partial<UserInfo>;
+  openPopup?: () => void;
+  openQR?: () => void;
+  openLink?: () => void;
+  openAddMother?: () => void;
+  openAddFather?: () => void;
+  openEditMother?: () => void;
+  openEditFather?: () => void;
+}
+
+export const Home: FC<HomeProps> = ({
+  id,
+  fetchedUser,
+  openPopup,
+  openQR,
+  openLink,
+  openAddMother,
+  openAddFather,
+  openEditMother,
+  openEditFather,
+}) => {
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
   const routeNavigator = useRouteNavigator();
 
@@ -57,9 +80,62 @@ export const Home: FC<HomeProps> = ({ id, fetchedUser, openPopup }) => {
             onClick={openPopup}
             style={{ marginTop: 10 }}
           >
-            Добавление матери
+            Добавить событие
           </Button>
-          
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openQR}
+            style={{ marginTop: 10 }}
+          >
+            Поделиться QR-кодом
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openLink}
+            style={{ marginTop: 10 }}
+          >
+            Пригласить
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openAddMother}
+            style={{ marginTop: 10 }}
+          >
+            Добавить мать
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openAddFather}
+            style={{ marginTop: 10 }}
+          >
+            Добавить отца
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openEditMother}
+            style={{ marginTop: 10 }}
+          >
+            Редактировать мать
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openEditFather}
+            style={{ marginTop: 10 }}
+          >
+            Редактировать отца
+          </Button>
         </Div>
       </Group>
     </Panel>
