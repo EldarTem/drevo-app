@@ -48,7 +48,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({ id, onClose }) => {
         }}
       >
         <img
-          src="/src/assets/img/VK.svg"
+          src="../assets/img/VK.svg"
           alt="Share on VK"
           style={{ width: "40px", height: "40px", cursor: "pointer" }}
           onClick={() => handleLinkClick("https://vk.com")}

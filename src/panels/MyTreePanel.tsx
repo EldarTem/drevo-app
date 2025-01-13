@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
 import FamilyTree from "@balkangraph/familytree.js";
 import "../styles/treeStyles.css";
+import editIcon from "../assets/img/edit.svg";
+import addIcon from "../assets/img/add.svg";
+import addIconWomen from "../assets/img/addw.svg";
 
-const editIconPath = "/src/assets/img/edit.svg";
-const addIconPath = "/src/assets/img/add.svg";
-const addIconPathWomen = "/src/assets/img/addw.svg";
+const editIconPath = editIcon;
+const addIconPath = addIcon;
+const addIconPathWomen = addIconWomen;
 
 interface MyNodeData {
   id: number;
