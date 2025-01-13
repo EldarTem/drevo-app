@@ -1,6 +1,6 @@
 .modal-popup .vkuiModalCard__in {
-  max-width: 630px !important; /* Устанавливаем ширину */
-  width: 90%; /* Для адаптивности */
+  max-width: 630px !important;
+  width: 90%;
 }
 .modal-popup .vkuiModalCardBase__header {
   font-size: 28px;
@@ -43,8 +43,8 @@
 }
 
 .modal-popup-s .vkuiModalCard__in {
-  max-width: 450px !important; /* Устанавливаем ширину */
-  width: 90%; /* Для адаптивности */
+  max-width: 450px !important;
+  width: 90%;
 }
 
 .modal-popup-s .vkuiModalCardBase__header {
@@ -80,4 +80,50 @@
 .tabbar-div {
   width: 50%;
   display: flex;
+}
+
+.add-media .vkuiModalPage__in-wrap {
+  max-width: 750px !important;
+}
+
+.add-media .vkuiModalPage__in {
+  width: 750px !important;
+  margin: 0 auto !important;
+  padding: 20px;
+}
+
+.button-add-media {
+  width: 100%;
+  background-color: #447bba !important;
+}
+
+.modal-title {
+  font-size: 28px;
+  font-weight: bold;
+}
+.modal-subtitle {
+  font-size: 13px;
+  color: #6f7985;
+}
+
+.add-media .button-modal-two {
+  background-color: #447bba !important;
+  color: #fff !important;
+  width: 49%;
+}
+.add-media .button-modal-three {
+  color: #447bba !important;
+  background-color: #fff !important;
+  border: solid #447bba;
+  padding-left: 25px;
+  padding-right: 25px;
+  width: 49%;
+}
+
+.add-media .vkuiModalDismissButton {
+  right: 0px;
+}
+
+.language-popover {
+  margin-top: -500px;
 }

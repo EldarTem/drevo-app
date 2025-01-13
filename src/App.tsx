@@ -23,7 +23,9 @@ import AddMotherModal from "./components/AddMother";
 import AddFatherModal from "./components/AddFather";
 import EditMotherModal from "./components/EditMother";
 import EditFatherModal from "./components/EditFather";
-// Добавляем массив relativesData
+import AddMediaModal from "./components/AddMediaModal";
+import QRCodeImage from "../src/assets/img/QRcode.svg";
+
 const relativesData = [
   {
     id: 1,
@@ -55,7 +57,6 @@ const App: React.FC = () => {
   );
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  // Добавляем состояние selectedId
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const closeModal = () => {
@@ -68,20 +69,45 @@ const App: React.FC = () => {
         id="relative-profile"
         onClose={closeModal}
         selectedRelative={
-          selectedId ? relativesData.find((r) => r.id === selectedId) : null
+          selectedId
+            ? {
+                id: String(selectedId),
+                name: relativesData.find((r) => r.id === selectedId)?.name,
+                year: relativesData.find((r) => r.id === selectedId)?.year,
+                avatarUrl: relativesData.find((r) => r.id === selectedId)
+                  ?.avatarUrl,
+                onClose: closeModal,
+                openShareQR: () => setActiveModal("share-qr"),
+                openAddMedia: () => setActiveModal("add-media"),
+                openEditFather: () => setActiveModal("edit-father"),
+              }
+            : null
         }
+        openShareQR={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        openAddMedia={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        openEditFather={function (): void {
+          throw new Error("Function not implemented.");
+        }}
       />
+
       <AddEventModal id="add-event" onClose={closeModal} />
+
       <ShareQRModal
         id="share-qr"
         onClose={closeModal}
-        qrCodeUrl="../src/assets/img/QRcode.svg"
+        qrCodeUrl={QRCodeImage}
       />
+
       <ShareLinkModal id="share-link" onClose={closeModal} />
       <AddMotherModal id="add-mother" onClose={closeModal} />
       <AddFatherModal id="add-father" onClose={closeModal} />
       <EditMotherModal id="edit-mother" onClose={closeModal} />
       <EditFatherModal id="edit-father" onClose={closeModal} />
+      <AddMediaModal id="add-media" onClose={closeModal} />
     </ModalRoot>
   );
 
@@ -124,21 +150,23 @@ const App: React.FC = () => {
                   openAddFather={() => setActiveModal("add-father")}
                   openEditMother={() => setActiveModal("edit-mother")}
                   openEditFather={() => setActiveModal("edit-father")}
+                  openAddMedia={() => setActiveModal("add-media")}
                 />
                 <Persik id={DEFAULT_VIEW_PANELS.PERSIK} />
                 <MyTreePanel
-                  id={DEFAULT_VIEW_PANELS.MY_TREE}
+                  id="my_tree"
                   className="relative-profile"
                   onSelectRelative={(nodeId) => {
                     console.log("Выбран узел с ID:", nodeId);
-                    setSelectedId(nodeId); // Используем setSelectedId
+                    setSelectedId(nodeId);
                     setActiveModal("relative-profile");
                   }}
-                  onEditNode={(nodeId) =>
-                    console.log("Редактировать узел:", nodeId)
-                  }
-                  onAddNode={(nodeId) => console.log("Добавить узел:", nodeId)}
+                  openAddMother={() => setActiveModal("add-mother")}
+                  openAddFather={() => setActiveModal("add-father")}
+                  openEditMother={() => setActiveModal("edit-mother")}
+                  openEditFather={() => setActiveModal("edit-father")}
                 />
+
                 <TimelinePanel id={DEFAULT_VIEW_PANELS.TIMELINE} />
               </View>
               <NavigationBar

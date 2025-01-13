@@ -4,7 +4,7 @@ import "../styles/modal.css";
 interface ShareQRModalProps {
   id: string;
   onClose: () => void;
-  qrCodeUrl: "string";
+  qrCodeUrl: string;
 }
 
 const ShareQRModal: React.FC<ShareQRModalProps> = ({

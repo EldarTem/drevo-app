@@ -29,6 +29,7 @@ export interface HomeProps extends NavIdProps {
   openAddFather?: () => void;
   openEditMother?: () => void;
   openEditFather?: () => void;
+  openAddMedia?: () => void;
 }
 
 export const Home: FC<HomeProps> = ({
@@ -41,6 +42,7 @@ export const Home: FC<HomeProps> = ({
   openAddFather,
   openEditMother,
   openEditFather,
+  openAddMedia,
 }) => {
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
   const routeNavigator = useRouteNavigator();
@@ -81,6 +83,15 @@ export const Home: FC<HomeProps> = ({
             style={{ marginTop: 10 }}
           >
             Добавить событие
+          </Button>
+          <Button
+            stretched
+            size="l"
+            mode="secondary"
+            onClick={openAddMedia}
+            style={{ marginTop: 10 }}
+          >
+            Добавить медиа
           </Button>
           <Button
             stretched

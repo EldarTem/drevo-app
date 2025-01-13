@@ -12,7 +12,7 @@ import {
 } from "@vkontakte/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import "swiper/css";
 import "swiper/css/navigation";
 import "../styles/RelativeProfileModal.css";
@@ -20,18 +20,41 @@ import "../styles/RelativeProfileModal.css";
 interface RelativeProfileModalProps {
   id: string;
   onClose: () => void;
-  selectedRelative?: RelativeProfileModalProps | null;
+  selectedRelative: {
+    id: string;
+    name?: string;
+    year?: string;
+    avatarUrl?: string;
+    onClose: () => void;
+    openShareQR: () => void;
+    openAddMedia: () => void;
+    openEditFather: () => void;
+  } | null;
+  openShareQR: () => void;
+  openAddMedia: () => void;
+  openEditFather: () => void;
 }
 
 const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
   id,
   onClose,
+  openShareQR,
+  openAddMedia,
+  openEditFather,
 }) => {
   const [isRelativesVisible, setIsRelativesVisible] = useState(true);
+  const [isTextExpanded, setIsTextExpanded] = useState(false); 
+
+  const routeNavigator = useRouteNavigator();
 
   const toggleRelativesVisibility = () => {
     setIsRelativesVisible((prev) => !prev);
   };
+
+  const handleToggleText = () => {
+    setIsTextExpanded((prev) => !prev); 
+  };
+
   const relatives = [
     {
       imageUrl:
@@ -105,8 +128,8 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
     >
       <Group>
         <Div className="header-icons">
-          <Icon28ViewOutline />
-          <Icon28QrCodeOutline />
+          <Icon28ViewOutline onClick={() => routeNavigator.push("/timeline")} />
+          <Icon28QrCodeOutline onClick={openShareQR} />
         </Div>
 
         {/* Информация о профиле */}
@@ -133,10 +156,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
         </Div>
 
         <Div className="buttons">
-          <button
-            className="edit-button"
-            onClick={() => console.log("Редактировать")}
-          >
+          <button className="edit-button" onClick={openEditFather}>
             Редактировать
           </button>
           <button
@@ -151,7 +171,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
         <Div className="section">
           <div className="section-group">
             <h2 className="section-title">Фото и видео</h2>
-            <div className="add-btn">
+            <div className="add-btn" onClick={openAddMedia}>
               <Icon16Add fill="#5181B8" />
             </div>
           </div>
@@ -196,6 +216,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
             ))}
           </div>
         </Div>
+
         {/* Биография */}
         <Div className="section">
           <div className="section-group">
@@ -204,12 +225,17 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
               <Icon16Add fill="#5181B8" />
             </div>
           </div>
-          <p className="section-text">
+          <p className={`section-text ${isTextExpanded ? "expanded" : ""}`}>
             Стал известным после того, как многочисленные фотографии с его
-            участием стали интернет-мемом...
+            участием стали интернет-мемом. Стал известным после того, как
+            многочисленные фотографии с его участием стали интернет-мемом. Стал
+            известным после того, как многочисленные фотографии с его участием
+            стали интернет-мемом. Стал известным после того, как многочисленные
+            фотографии с его участием стали интернет-мемом.
           </p>
-          <a className="section-link" href="#">
-            Читать полностью <Icon16ChevronOutline fill="#9EB4C8" />
+          <a className="section-link" onClick={handleToggleText}>
+            {isTextExpanded ? "Скрыть" : "Читать полностью"}{" "}
+            <Icon16ChevronOutline fill="#9EB4C8" />
           </a>
         </Div>
 

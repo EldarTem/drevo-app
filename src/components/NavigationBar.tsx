@@ -38,17 +38,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         >
           <Icon24TreeNodes />
         </TabbarItem>
-        <TabbarItem
-          text="Поделиться"
-          onClick={openShareLinkModal} // Открытие модалки
-        >
+        <TabbarItem text="Поделиться" onClick={openShareLinkModal}>
           <Icon24ShareExternal />
         </TabbarItem>
-        <TabbarItem
-          onClick={() => routeNavigator.push("/persik")}
-          selected={activePanel === "persik"}
-          text="Персик"
-        >
+        <TabbarItem selected={activePanel === "persik"} text="Русский">
           <Icon24Globe />
         </TabbarItem>
       </div>

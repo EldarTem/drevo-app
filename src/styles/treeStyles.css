@@ -1,62 +1,25 @@
-/* Узловая форма — здесь мы можем переопределить fill, stroke и т.д.
-   Но сам путь (path) мы объявили в node=..., поэтому "d" остаётся в TSX.
-   Класс node-shape (см. node="<path class='node-shape' ...>") */
 .node-shape {
-  fill: #fff; /* Белый фон */
-  stroke: rgba(68, 123, 186, 1); /* Синий обвод */
+  fill: #fff;
+  stroke: rgba(68, 123, 186, 1);
   stroke-width: 2px;
 }
 
-.node-shape-woomen {
-  fill: #fff; /* Белый фон */
-  stroke: #ff748d; /* Синий обвод */
+.node-shape-women {
+  fill: #fff;
+  stroke: #ff748d;
   stroke-width: 2px;
 }
 
-/* Изображение-аватар, если хотим какие-то общие стили */
-.avatar-img {
-  /* Например, скруглённая рамка вокруг */
-  /* stroke: #ddd; stroke-width: 1px; */
-  /* или shadow — на ваше усмотрение */
-}
-
-/* Иконка камеры поверх аватара */
-.camera-icon {
-  /* Можно вручную сместить, если нужно */
-  /* opacity: 0.8; */
-}
-
-/* Иконка карандаша (edit-icon) в правом верхнем углу */
-.edit-icon {
-  /* cursor: pointer; */
-  /* opacity: 0.7; */
-}
-
-/* Кнопка «+» внизу. На скриншоте это синие линии, 
-     но у нас реализовано как «выемка» в path. 
-     Если хотите настоящую иконку, придётся добавить её 
-     в nodeTemplate или defs. */
-
-/* Текст имени, фамилии */
 .user-name {
   font-family: sans-serif;
   font-size: 16px;
-  fill: #333; /* Тёмный цвет текста */
-  font-weight: 600; /* Полужирный */
+  fill: #333;
+  font-weight: 600;
 }
 
-/* Текст года */
 .user-year {
   font-family: sans-serif;
   font-size: 14px;
   fill: #666;
   font-weight: 400;
 }
-
-/* Если хотите, чтобы для всех узлов 
-     задний фон SVG был серым, можно так: */
-/*
-  #treeRef>svg {
-    background-color: #f0f0f0;
-  }
-  */

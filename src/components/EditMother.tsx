@@ -11,7 +11,6 @@ import {
   Select,
   Textarea,
 } from "@vkontakte/vkui";
-import { Icon24Add, Icon48Camera } from "@vkontakte/icons";
 import "../styles/appPanel.css";
 
 interface EditMotherModal {
@@ -21,8 +20,8 @@ interface EditMotherModal {
 
 export const EditMotherModal: React.FC<EditMotherModal> = ({ id, onClose }) => {
   const [isAlive, setIsAlive] = useState(true);
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [photoURL, setPhotoURL] = useState<string | undefined>(undefined);
+  const [photo] = useState<File | null>(null);
+  const [, setPhotoURL] = useState<string | undefined>(undefined);
   const [firstName, setFirstName] = useState<string>("Александра");
   const [patronymic, setPatronymic] = useState<string>("Петровна");
   const [maidenName, setMaidenName] = useState<string>("Журавлёва");
@@ -49,26 +48,6 @@ export const EditMotherModal: React.FC<EditMotherModal> = ({ id, onClose }) => {
       setPhotoURL(undefined);
     }
   }, [photo]);
-
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const selectedFile = event.target.files[0];
-      const validTypes = ["image/jpeg", "image/png"];
-      const maxSize = 10 * 1024 * 1024;
-
-      if (!validTypes.includes(selectedFile.type)) {
-        alert("Недопустимый формат файла. Пожалуйста, выберите JPG или PNG.");
-        return;
-      }
-
-      if (selectedFile.size > maxSize) {
-        alert("Размер файла превышает 10MB.");
-        return;
-      }
-
-      setPhoto(selectedFile);
-    }
-  };
 
   const handleBiographyChange = (
     event:
