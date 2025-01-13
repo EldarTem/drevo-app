@@ -83,15 +83,9 @@ const App: React.FC = () => {
               }
             : null
         }
-        openShareQR={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        openAddMedia={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        openEditFather={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        openShareQR={() => setActiveModal("share-qr")}
+        openAddMedia={() => setActiveModal("add-media")}
+        openEditFather={() => setActiveModal("edit-father")}
       />
 
       <AddEventModal id="add-event" onClose={closeModal} />
@@ -114,18 +108,35 @@ const App: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
+        let user: Partial<UserInfo> | undefined;
+
         if (import.meta.env.DEV) {
-          setUser({
+          // Для разработки задаем дефолтного пользователя
+          user = {
             id: 123456,
             first_name: "Тест",
             last_name: "Пользователь",
-          });
+          };
         } else {
-          const user = await bridge.send("VKWebAppGetUserInfo", {});
-          setUser(user);
+          user = await bridge.send("VKWebAppGetUserInfo", {});
         }
+
+        if (!user || !user.id) {
+          user = {
+            id: 123456,
+            first_name: "Тест",
+            last_name: "Пользователь",
+          };
+        }
+
+        setUser(user);
       } catch (error) {
         console.error("Ошибка при получении информации о пользователе:", error);
+        setUser({
+          id: 123456,
+          first_name: "Тест",
+          last_name: "Пользователь",
+        });
       } finally {
         setPopout(null);
       }
