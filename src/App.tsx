@@ -111,7 +111,6 @@ const App: React.FC = () => {
         let user: Partial<UserInfo> | undefined;
 
         if (import.meta.env.DEV) {
-          // Для разработки задаем дефолтного пользователя
           user = {
             id: 123456,
             first_name: "Тест",
