@@ -110,21 +110,15 @@ const App: React.FC = () => {
       try {
         let user: Partial<UserInfo> | undefined;
 
-        if (import.meta.env.DEV) {
-          user = {
-            id: 123456,
-            first_name: "Тест",
-            last_name: "Пользователь",
-          };
-        } else {
+        if (bridge.isWebView()) {
           user = await bridge.send("VKWebAppGetUserInfo", {});
-        }
-
-        if (!user || !user.id) {
+        } else {
+          console.log("Приложение запущено в браузере");
           user = {
             id: 123456,
-            first_name: "Тест",
+            first_name: "Браузер",
             last_name: "Пользователь",
+            photo_200: "https://via.placeholder.com/200",
           };
         }
 
@@ -133,8 +127,9 @@ const App: React.FC = () => {
         console.error("Ошибка при получении информации о пользователе:", error);
         setUser({
           id: 123456,
-          first_name: "Тест",
+          first_name: "Ошибка",
           last_name: "Пользователь",
+          photo_200: "https://via.placeholder.com/200",
         });
       } finally {
         setPopout(null);
