@@ -10,6 +10,14 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "../styles/TimelinePanel.css";
+
+import GaroldImage from "../assets/img/garold.png";
+import Image1 from "../assets/img/image2.png";
+import Image2 from "../assets/img/image3.png";
+import LeftArrow from "../assets/img/left.svg";
+import RightArrow from "../assets/img/right.svg";
+import QuotesIcon from "../assets/img/quotes.svg";
+import FooterBackground from "../assets/img/bg-footer.png";
 interface TimelinePanelProps {
   id: string;
 }
@@ -207,7 +215,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                 }}
               >
                 <img
-                  src="src\assets\img\garold.png"
+                  src={GaroldImage}
                   alt="Гарольд Иванов"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
@@ -333,7 +341,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                       }}
                     >
                       <img
-                        src="src\assets\img\garold.png"
+                        src={GaroldImage}
                         alt=""
                         style={{
                           width: "100%",
@@ -622,7 +630,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
           >
             <SwiperSlide>
               <img
-                src="src/assets/img/image2.png"
+                src={Image1}
                 alt="Фото 1"
                 style={{
                   width: "100%",
@@ -636,7 +644,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
             </SwiperSlide>
             <SwiperSlide>
               <img
-                src="src/assets/img/image2.png"
+                src={Image1}
                 alt="Фото 2"
                 style={{
                   width: "100%",
@@ -650,7 +658,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
             </SwiperSlide>
             <SwiperSlide>
               <img
-                src="src/assets/img/image3.png"
+                src={Image2}
                 alt="Фото 3"
                 style={{
                   width: "100%",
@@ -664,7 +672,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
             </SwiperSlide>
             <SwiperSlide>
               <img
-                src="src/assets/img/image3.png"
+                src={Image2}
                 alt="Фото 3"
                 style={{
                   width: "100%",
@@ -706,7 +714,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                 (e.currentTarget.style.background = "transparent")
               }
             >
-              <img src="src\assets\img\left.svg" alt="left" />
+              <img src={LeftArrow} alt="left" />
             </button>
             <button
               className="custom-next"
@@ -729,7 +737,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                 (e.currentTarget.style.background = "transparent")
               }
             >
-              <img src="src\assets\img\right.svg" alt="right" />
+              <img src={RightArrow} alt="right" />
             </button>
           </div>
         </div>
@@ -776,7 +784,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <img src="src\assets\img\left.svg" alt="left" />
+                <img src={LeftArrow} alt="left" />
               </button>
             </div>
             <Swiper
@@ -802,7 +810,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                     }}
                   >
                     <img
-                      src="src\assets\img\quotes.svg"
+                      src={QuotesIcon}
                       alt="Quote"
                       style={{
                         width: "24px",
@@ -860,7 +868,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <img src="src\assets\img\right.svg" alt="right" />
+                <img src={RightArrow} alt="right" />
               </button>
             </div>
           </div>
@@ -883,7 +891,7 @@ const TimelinePanel: FC<TimelinePanelProps> = ({ id }) => {
               left: "0",
               width: "100%",
               height: "100%",
-              backgroundImage: "url('srcassetsimg\bg-footer.png')",
+              backgroundImage: `url(${FooterBackground})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: 0,

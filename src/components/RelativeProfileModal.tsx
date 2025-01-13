@@ -16,7 +16,9 @@ import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import "swiper/css";
 import "swiper/css/navigation";
 import "../styles/RelativeProfileModal.css";
-
+import Image1 from "../assets/img/image1.png";
+import Image2 from "../assets/img/image2.png";
+import Image3 from "../assets/img/image3.png";
 interface RelativeProfileModalProps {
   id: string;
   onClose: () => void;
@@ -43,7 +45,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
   openEditFather,
 }) => {
   const [isRelativesVisible, setIsRelativesVisible] = useState(true);
-  const [isTextExpanded, setIsTextExpanded] = useState(false); 
+  const [isTextExpanded, setIsTextExpanded] = useState(false);
 
   const routeNavigator = useRouteNavigator();
 
@@ -52,7 +54,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
   };
 
   const handleToggleText = () => {
-    setIsTextExpanded((prev) => !prev); 
+    setIsTextExpanded((prev) => !prev);
   };
 
   const relatives = [
@@ -111,11 +113,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
         "https://cdn.builder.io/api/v1/image/assets/TEMP/f0dd387173beb17344cfb63ee1d80c008960c5a1043ff15e445a862630aacd86",
       videoUrl:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/dd9b5b9823d3b94c49fec925e386af8889941c398f95ce1c24c433e26f562f78",
-      images: [
-        "src/assets/img/image1.png",
-        "src/assets/img/image1.png",
-        "src/assets/img/image1.png",
-      ],
+      images: [Image1, Image2, Image3],
     },
   ];
 

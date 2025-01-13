@@ -8,6 +8,8 @@ import {
   Radio,
 } from "@vkontakte/vkui";
 import "../styles/modal.css";
+import VKicon from "../assets/img/VK.svg";
+import FBicon from "../assets/img/FB.svg";
 
 interface ShareLinkModalProps {
   id: string;
@@ -48,13 +50,13 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({ id, onClose }) => {
         }}
       >
         <img
-          src="../assets/img/VK.svg"
+          src={VKicon}
           alt="Share on VK"
           style={{ width: "40px", height: "40px", cursor: "pointer" }}
           onClick={() => handleLinkClick("https://vk.com")}
         />
         <img
-          src="/src/assets/img/FB.svg"
+          src={FBicon}
           alt="Share on Facebook"
           style={{ width: "40px", height: "40px", cursor: "pointer" }}
           onClick={() => handleLinkClick("https://facebook.com")}
