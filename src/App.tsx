@@ -56,7 +56,7 @@ const App: React.FC = () => {
     <ScreenSpinner size="large" />
   );
   const [activeModal, setActiveModal] = useState<string | null>(null);
-
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const closeModal = () => {
@@ -108,21 +108,24 @@ const App: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        let user: Partial<UserInfo> | undefined;
-
         if (bridge.isWebView()) {
-          user = await bridge.send("VKWebAppGetUserInfo", {});
+          const user = await bridge.send("VKWebAppGetUserInfo", {});
+          setUser(user);
+
+          const tokenResponse = await bridge.send("VKWebAppGetAuthToken", {
+            app_id: 123456, // Замените на ваш app_id
+            scope: "",
+          });
+          setAccessToken(tokenResponse.access_token);
         } else {
           console.log("Приложение запущено в браузере");
-          user = {
+          setUser({
             id: 123456,
             first_name: "Браузер",
             last_name: "Пользователь",
             photo_200: "https://via.placeholder.com/200",
-          };
+          });
         }
-
-        setUser(user);
       } catch (error) {
         console.error("Ошибка при получении информации о пользователе:", error);
         setUser({
@@ -137,7 +140,6 @@ const App: React.FC = () => {
     }
     fetchData();
   }, []);
-
   return (
     <ConfigProvider>
       <AdaptivityProvider>
@@ -148,6 +150,7 @@ const App: React.FC = () => {
                 <Home
                   id={DEFAULT_VIEW_PANELS.HOME}
                   fetchedUser={fetchedUser}
+                  accessToken={accessToken}
                   openPopup={() => setActiveModal("add-event")}
                   openQR={() => setActiveModal("share-qr")}
                   openLink={() => setActiveModal("share-link")}

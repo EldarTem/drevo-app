@@ -22,6 +22,7 @@ export interface HomeProps extends NavIdProps {
 
 export interface HomeProps extends NavIdProps {
   fetchedUser?: Partial<UserInfo>;
+  accessToken?: string | null;
   openPopup?: () => void;
   openQR?: () => void;
   openLink?: () => void;
@@ -35,6 +36,7 @@ export interface HomeProps extends NavIdProps {
 export const Home: FC<HomeProps> = ({
   id,
   fetchedUser,
+  accessToken,
   openPopup,
   openQR,
   openLink,
@@ -64,7 +66,11 @@ export const Home: FC<HomeProps> = ({
           </Cell>
         </Group>
       )}
-
+      {accessToken && (
+        <Group header={<Header mode="secondary">Access Token</Header>}>
+          <Div>{accessToken}</Div>
+        </Group>
+      )}
       <Group header={<Header mode="secondary">Navigation Example</Header>}>
         <Div>
           <Button
