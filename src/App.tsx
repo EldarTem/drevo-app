@@ -112,11 +112,20 @@ const App: React.FC = () => {
           const user = await bridge.send("VKWebAppGetUserInfo", {});
           setUser(user);
 
-          const tokenResponse = await bridge.send("VKWebAppGetAuthToken", {
-            app_id: 52824513,
-            scope: "",
+          const storageData = await bridge.send("VKWebAppStorageGet", {
+            keys: ["6287487:web_token:login:auth"],
           });
-          setAccessToken(tokenResponse.access_token);
+
+          const tokenData = storageData.keys.find(
+            (item) => item.key === "6287487:web_token:login:auth"
+          );
+
+          if (tokenData && tokenData.value) {
+            const parsedToken = JSON.parse(tokenData.value);
+            setAccessToken(parsedToken.access_token);
+          } else {
+            console.warn("Токен не найден в локальном хранилище");
+          }
         } else {
           console.log("Приложение запущено в браузере");
           setUser({
@@ -127,7 +136,7 @@ const App: React.FC = () => {
           });
         }
       } catch (error) {
-        console.error("Ошибка при получении информации о пользователе:", error);
+        console.error("Ошибка при получении данных:", error);
         setUser({
           id: 123456,
           first_name: "Ошибка",
@@ -138,6 +147,7 @@ const App: React.FC = () => {
         setPopout(null);
       }
     }
+
     fetchData();
   }, []);
   return (
