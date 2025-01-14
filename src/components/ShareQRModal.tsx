@@ -45,13 +45,7 @@ const ShareQRModal: React.FC<ShareQRModalProps> = ({
         </Button>
       </FormItem>
       <Separator />
-      <FormItem
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "24px",
-        }}
-      >
+      <FormItem className="form-item-qr"      >
         <Button size="l" mode="secondary" className="button-modal-two">
           Заказать изготовление
         </Button>

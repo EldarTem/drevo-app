@@ -38,6 +38,61 @@
   padding-right: 25px;
 }
 
+.form-item-qr {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+@media (max-width: 768px) {
+  .modal-popup .vkuiModalCardBase__container {
+    padding: 20px 40px !important;
+  }
+}
+@media (max-width: 880px) {
+  .tabbar-div {
+    width: 100% !important;
+    display: flex;
+  }
+}
+@media (max-width: 480px) {
+  .add-media .vkuiModalPage__in {
+    padding: 16px !important;
+  }
+  .vkuiModalPage__in-wrap {
+    transform: translate3d(0px, 0%, 0px) !important;
+  }
+  .modal-popup .vkuiModalCardBase__container {
+    padding: 10px 0px !important;
+  }
+  .modal-popup .vkuiModalCardBase__header {
+    font-size: 24px;
+  }
+  .form-item-qr {
+    flex-direction: column;
+    margin-top: 0px;
+    gap: 10px;
+  }
+  .modal-input-two {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+  .button-modal {
+    width: 100%;
+  }
+  .modal-popup-s .button-modal {
+    width: 100% !important;
+    padding: none;
+  }
+  .modal-popup-s .modal-input-two {
+    margin-bottom: 10px;
+  }
+  .vkuiInternalTabbar--layout-horizontal .vkuiTabbarItem__in {
+    flex-direction: column;
+  }
+  .vkuiInternalTabbar--layout-horizontal .vkuiTabbarItem__text {
+    margin-left: 0px;
+  }
+}
 .modal-popup .vkuiModalDismissButton {
   right: 0px;
 }

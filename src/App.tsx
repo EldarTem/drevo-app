@@ -113,7 +113,7 @@ const App: React.FC = () => {
           setUser(user);
 
           const tokenResponse = await bridge.send("VKWebAppGetAuthToken", {
-            app_id: 123456, // Замените на ваш app_id
+            app_id: 52824513,
             scope: "",
           });
           setAccessToken(tokenResponse.access_token);
