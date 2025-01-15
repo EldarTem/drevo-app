@@ -160,7 +160,9 @@
   font-size: 13px;
   color: #6f7985;
 }
-
+.add-media .vkuiSeparator__in {
+  margin: 0 !important;
+}
 .add-media .button-modal-two {
   background-color: #447bba !important;
   color: #fff !important;
@@ -181,4 +183,7 @@
 
 .language-popover {
   margin-top: -500px;
+}
+
+.textarea-modal-event {
 }
