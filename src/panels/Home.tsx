@@ -88,7 +88,7 @@ export const Home: FC<HomeProps> = ({
             onClick={openPopup}
             style={{ marginTop: 10 }}
           >
-            Добавить событие
+            Добавить воспоминание
           </Button>
           <Button
             stretched

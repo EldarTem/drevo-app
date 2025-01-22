@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/App.tsx
+import React, { useState, useEffect, useCallback } from "react";
 import bridge, { UserInfo } from "@vkontakte/vk-bridge";
 import {
   AdaptivityProvider,
@@ -25,6 +26,7 @@ import EditMotherModal from "./components/EditMother";
 import EditFatherModal from "./components/EditFather";
 import AddMediaModal from "./components/AddMediaModal";
 import QRCodeImage from "../src/assets/img/QRcode.svg";
+import FamilyTreeModal from "./components/FamilyTreeModal";
 
 const relativesData = [
   {
@@ -59,9 +61,23 @@ const App: React.FC = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setActiveModal(null);
-  };
+  }, []);
+
+  // Обернули функции в useCallback для оптимизации и предотвращения лишних перерендерингов
+  const openShareQR = useCallback(() => setActiveModal("share-qr"), []);
+  const openAddMedia = useCallback(() => setActiveModal("add-media"), []);
+  const openEditFather = useCallback(() => setActiveModal("edit-father"), []);
+  const openEditMother = useCallback(() => setActiveModal("edit-mother"), []);
+  const openShareLink = useCallback(() => setActiveModal("share-link"), []);
+  const openAddEvent = useCallback(() => setActiveModal("add-event"), []);
+  const openAddMother = useCallback(() => setActiveModal("add-mother"), []);
+  const openAddFather = useCallback(() => setActiveModal("add-father"), []);
+  const openTreeModal = useCallback(
+    () => setActiveModal("family-tree-modal"),
+    []
+  );
 
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={closeModal}>
@@ -77,15 +93,15 @@ const App: React.FC = () => {
                 avatarUrl: relativesData.find((r) => r.id === selectedId)
                   ?.avatarUrl,
                 onClose: closeModal,
-                openShareQR: () => setActiveModal("share-qr"),
-                openAddMedia: () => setActiveModal("add-media"),
-                openEditFather: () => setActiveModal("edit-father"),
+                openShareQR: openShareQR,
+                openAddMedia: openAddMedia,
+                openEditFather: openEditFather,
               }
             : null
         }
-        openShareQR={() => setActiveModal("share-qr")}
-        openAddMedia={() => setActiveModal("add-media")}
-        openEditFather={() => setActiveModal("edit-father")}
+        openShareQR={openShareQR}
+        openAddMedia={openAddMedia}
+        openEditFather={openEditFather}
       />
 
       <AddEventModal id="add-event" onClose={closeModal} />
@@ -102,6 +118,24 @@ const App: React.FC = () => {
       <EditMotherModal id="edit-mother" onClose={closeModal} />
       <EditFatherModal id="edit-father" onClose={closeModal} />
       <AddMediaModal id="add-media" onClose={closeModal} />
+      <FamilyTreeModal
+        id="family-tree-modal"
+        onClose={closeModal}
+        onSelectRelation={(relation) => {
+          console.log("Выбран тип родственника:", relation);
+          switch (relation) {
+            case "Отец":
+              openAddFather();
+              break;
+            case "Мать":
+              openAddMother();
+              break;
+            // Добавьте остальные случаи по необходимости
+            default:
+              break;
+          }
+        }}
+      />
     </ModalRoot>
   );
 
@@ -150,6 +184,7 @@ const App: React.FC = () => {
 
     fetchData();
   }, []);
+
   return (
     <ConfigProvider>
       <AdaptivityProvider>
@@ -161,14 +196,14 @@ const App: React.FC = () => {
                   id={DEFAULT_VIEW_PANELS.HOME}
                   fetchedUser={fetchedUser}
                   accessToken={accessToken}
-                  openPopup={() => setActiveModal("add-event")}
-                  openQR={() => setActiveModal("share-qr")}
-                  openLink={() => setActiveModal("share-link")}
-                  openAddMother={() => setActiveModal("add-mother")}
-                  openAddFather={() => setActiveModal("add-father")}
-                  openEditMother={() => setActiveModal("edit-mother")}
-                  openEditFather={() => setActiveModal("edit-father")}
-                  openAddMedia={() => setActiveModal("add-media")}
+                  openPopup={openAddEvent}
+                  openQR={openShareQR}
+                  openLink={openShareLink}
+                  openAddMother={openAddMother}
+                  openAddFather={openAddFather}
+                  openEditMother={openEditMother}
+                  openEditFather={openEditFather}
+                  openAddMedia={openAddMedia}
                 />
                 <Persik id={DEFAULT_VIEW_PANELS.PERSIK} />
                 <MyTreePanel
@@ -179,17 +214,16 @@ const App: React.FC = () => {
                     setSelectedId(nodeId);
                     setActiveModal("relative-profile");
                   }}
-                  openAddMother={() => setActiveModal("add-mother")}
-                  openAddFather={() => setActiveModal("add-father")}
-                  openEditMother={() => setActiveModal("edit-mother")}
-                  openEditFather={() => setActiveModal("edit-father")}
+                  openAddMother={openAddMother}
+                  openAddFather={openAddFather}
+                  openEditMother={openEditMother}
+                  openEditFather={openEditFather}
+                  openTreeModal={openTreeModal}
                 />
 
                 <TimelinePanel id={DEFAULT_VIEW_PANELS.TIMELINE} />
               </View>
-              <NavigationBar
-                openShareLinkModal={() => setActiveModal("share-link")}
-              />
+              <NavigationBar openShareLinkModal={openShareLink} />
             </SplitCol>
           </SplitLayout>
         </AppRoot>

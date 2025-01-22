@@ -78,11 +78,12 @@ interface MyTreePanelProps {
   openAddFather: () => void;
   openEditMother: () => void;
   openEditFather: () => void;
+  openTreeModal: () => void;
 }
 export function MyTreePanel({
   onSelectRelative,
-  openAddMother,
   openEditFather,
+  openTreeModal,
 }: MyTreePanelProps) {
   const treeRef = useRef<HTMLDivElement>(null);
   const familyInstance = useRef<FamilyTree | null>(null);
@@ -209,6 +210,7 @@ export function MyTreePanel({
       },
       mode: "light",
       toolbar: { layout: false, fit: false, zoom: false },
+      enableSearch: false,
       minPartnerSeparation: 100,
       levelSeparation: 100,
       siblingSeparation: 100,
@@ -226,7 +228,7 @@ export function MyTreePanel({
           openEditFather();
         } else if (action === "add") {
           console.log("Добавление узла:", node.id);
-          openAddMother();
+          openTreeModal();
         } else {
           console.log("Выбран узел:", node);
           onSelectRelative(node.id);
@@ -240,7 +242,7 @@ export function MyTreePanel({
     return () => {
       destroyTree();
     };
-  }, [onSelectRelative, openAddMother, openEditFather]);
+  }, [onSelectRelative, openTreeModal, openEditFather]);
 
   return <div ref={treeRef} style={{ width: "100%", height: "100%" }} />;
 }

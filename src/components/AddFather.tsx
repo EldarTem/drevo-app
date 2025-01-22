@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ModalPage,
-  ModalPageHeader,
   Input,
   Radio,
   RadioGroup,
@@ -131,16 +130,12 @@ export const AddFatherModal: React.FC<AddFatherModalProps> = ({
   );
 
   return (
-    <ModalPage
-      id={id}
-      settlingHeight={80}
-      header={
-        <ModalPageHeader>Добавить отца для Алексея Иванова</ModalPageHeader>
-      }
-      className="add-mother-modal"
-    >
+    <ModalPage id={id} settlingHeight={80} className="add-mother-modal">
       <form onSubmit={handleSubmit}>
         <Group>
+          <Div>
+            <div className="modal-title">Добавить отца для Алексея Иванова</div>
+          </Div>
           <Div className="photo-group">
             <Avatar size={113} src={photoURL}>
               {!photo && (

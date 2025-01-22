@@ -3,6 +3,17 @@
   stroke: rgba(68, 123, 186, 1);
   stroke-width: 2px;
 }
+.node-shape-add-partner {
+  fill: rgba(68, 123, 186, 1);
+  stroke: rgba(68, 123, 186, 1);
+  stroke-width: 2px;
+}
+
+.node-shape-modal {
+  fill: #fff;
+  stroke: #fff;
+  stroke-width: 2px;
+}
 
 .node-shape-women {
   fill: #fff;

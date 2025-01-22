@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ModalPage,
-  ModalPageHeader,
   Input,
   Radio,
   RadioGroup,
@@ -133,16 +132,12 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   );
 
   return (
-    <ModalPage
-      id={id}
-      settlingHeight={80}
-      header={
-        <ModalPageHeader>Добавить мать для Алексея Иванова</ModalPageHeader>
-      }
-      className="add-mother-modal"
-    >
+    <ModalPage id={id} className="add-mother-modal">
       <form onSubmit={handleSubmit}>
         <Group>
+          <Div>
+            <div className="modal-title">Добавить мать для Алексея Иванова</div>
+          </Div>
           <Div className="photo-group">
             <Avatar size={113} src={photoURL}>
               {!photo && (
@@ -304,70 +299,72 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
         </Div>
 
         {!isAlive && (
-          <Div className="two-columns">
-            <Div className="column">
-              <Div className="input-label">Дата смерти</Div>
-              <Div className="date-wrapper">
-                <Div className="date-select">
-                  <Select
-                    placeholder="День"
-                    value={dayOfDeath}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-                      setDayOfDeath(event.target.value)
-                    }
-                    options={[
-                      { label: "День", value: "" },
-                      ...days.map((day) => ({
-                        label: day.toString(),
-                        value: day.toString().padStart(2, "0"),
-                      })),
-                    ]}
-                  />
-                </Div>
-                <Div className="date-select">
-                  <Select
-                    placeholder="Месяц"
-                    value={monthOfDeath}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-                      setMonthOfDeath(event.target.value)
-                    }
-                    options={[
-                      { label: "Месяц", value: "" },
-                      ...months.map((month) => ({
-                        label: month.label,
-                        value: month.value,
-                      })),
-                    ]}
-                  />
-                </Div>
-                <Div className="date-select">
-                  <Select
-                    placeholder="Год"
-                    value={yearOfDeath}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-                      setYearOfDeath(event.target.value)
-                    }
-                    options={[
-                      { label: "Год", value: "" },
-                      ...years.map((year) => ({
-                        label: year,
-                        value: year,
-                      })),
-                    ]}
-                  />
+          <Group>
+            <Div className="two-columns">
+              <Div className="column">
+                <Div className="input-label">Дата смерти</Div>
+                <Div className="date-wrapper">
+                  <Div className="date-select">
+                    <Select
+                      placeholder="День"
+                      value={dayOfDeath}
+                      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                        setDayOfDeath(event.target.value)
+                      }
+                      options={[
+                        { label: "День", value: "" },
+                        ...days.map((day) => ({
+                          label: day.toString(),
+                          value: day.toString().padStart(2, "0"),
+                        })),
+                      ]}
+                    />
+                  </Div>
+                  <Div className="date-select">
+                    <Select
+                      placeholder="Месяц"
+                      value={monthOfDeath}
+                      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                        setMonthOfDeath(event.target.value)
+                      }
+                      options={[
+                        { label: "Месяц", value: "" },
+                        ...months.map((month) => ({
+                          label: month.label,
+                          value: month.value,
+                        })),
+                      ]}
+                    />
+                  </Div>
+                  <Div className="date-select">
+                    <Select
+                      placeholder="Год"
+                      value={yearOfDeath}
+                      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                        setYearOfDeath(event.target.value)
+                      }
+                      options={[
+                        { label: "Год", value: "" },
+                        ...years.map((year) => ({
+                          label: year,
+                          value: year,
+                        })),
+                      ]}
+                    />
+                  </Div>
                 </Div>
               </Div>
-            </Div>
 
-            <Div className="column">
-              <Div className="input-label">Место захоронения</Div>
-              <Input
-                placeholder="Введите место захоронения"
-                value={placeOfBurial}
-                onChange={(e) => setPlaceOfBurial(e.target.value)}
-              />
+              <Div className="column">
+                <Div className="input-label">Место захоронения</Div>
+                <Input
+                  placeholder="Введите место захоронения"
+                  value={placeOfBurial}
+                  onChange={(e) => setPlaceOfBurial(e.target.value)}
+                />
+              </Div>
             </Div>
-          </Div>
+          </Group>
         )}
 
         <Group>
@@ -383,7 +380,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
               type="submit"
               stretched
               mode="primary"
-              className="submot-popup"
+              className="submit-popup"
             >
               Добавить
             </Button>

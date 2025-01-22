@@ -120,7 +120,7 @@ const AddEventModal: React.FC<AddEventModalProps> = ({ id, onClose }) => {
     <ModalPage id={id} onClose={onClose} className="add-media">
       <Group>
         <Div style={{ padding: "0" }}>
-          <div className="modal-title">Добавить событие</div>
+          <div className="modal-title">Добавить воспоминание</div>
         </Div>
 
         <Div style={{ padding: "0", marginTop: "30px", minHeight: "260px" }}>
