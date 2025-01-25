@@ -34,3 +34,32 @@
   fill: #666;
   font-weight: 400;
 }
+
+.user-add-name {
+  font-family: sans-serif;
+  font-size: 16px;
+  fill: #fff;
+  font-weight: 600;
+}
+
+.user-add-year {
+  font-family: sans-serif;
+  font-size: 15px;
+  fill: #fff;
+  font-weight: 400;
+}
+.family-modal {
+  background: rgba(0, 0, 0, 0.6);
+}
+.family-modal .vkuiModalPage__in-wrap {
+  max-width: 120% !important;
+  max-height: 100% !important;
+}
+
+.family-modal .vkuiModalPage__in {
+  background-color: transparent;
+  box-shadow: none;
+}
+.family-modal .bft-light {
+  background-color: transparent;
+}
