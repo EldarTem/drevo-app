@@ -1,3 +1,5 @@
+// MyTreePanel.tsx
+
 import { useEffect, useRef } from "react";
 import FamilyTree from "@balkangraph/familytree.js";
 import "../styles/treeStyles.css";
@@ -22,74 +24,6 @@ interface MyNodeData {
   [key: string]: unknown;
 }
 
-const testData: MyNodeData[] = [
-  {
-    id: 1,
-    pids: [7, 9],
-    name: "Иван",
-    surname: "Иванов",
-    year: "1921",
-    gender: "male",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 9,
-    pids: [1],
-    name: "Султание",
-    surname: "Иванова",
-    year: "1925",
-    gender: "female",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 11,
-    pids: [1],
-    name: "Эльмаз",
-    surname: "Иванова",
-    year: "1925",
-    gender: "female",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 10,
-    pids: [1],
-    name: "Эльмаз",
-    surname: "Иванова",
-    year: "1925",
-    gender: "female",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 7,
-    pids: [1],
-    name: "Эльмаз",
-    surname: "Иванова",
-    year: "1925",
-    gender: "female",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 3,
-    mid: 7,
-    fid: 1,
-    name: "Иван",
-    surname: "Иванов",
-    year: "1950",
-    gender: "male",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-  {
-    id: 2,
-    mid: 7,
-    fid: 1,
-    name: "Мария",
-    surname: "Иванова",
-    year: "1955",
-    gender: "female",
-    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
-  },
-];
-
 interface MyTreePanelProps {
   id: string;
   className: string;
@@ -99,6 +33,8 @@ interface MyTreePanelProps {
   openEditMother: () => void;
   openEditFather: () => void;
   openTreeModal: () => void;
+  treeData: MyNodeData[];
+  setTreeData: React.Dispatch<React.SetStateAction<MyNodeData[]>>;
 }
 
 interface MyFamilyTreeInstance {
@@ -115,6 +51,7 @@ export function MyTreePanel({
   onSelectRelative,
   openEditFather,
   openTreeModal,
+  treeData,
 }: MyTreePanelProps) {
   const treeRef = useRef<HTMLDivElement>(null);
   const familyInstance = useRef<MyFamilyTreeInstance | null>(null);
@@ -126,7 +63,6 @@ export function MyTreePanel({
       } catch (error) {
         console.error(error);
       }
-
       familyInstance.current = null;
     }
   };
@@ -218,7 +154,7 @@ export function MyTreePanel({
 
     const family = new FamilyTree(treeRef.current, {
       template: "myTemplate",
-      nodes: testData,
+      nodes: treeData,
       nodeBinding: {
         field_0: "name",
         field_1: "year",
@@ -242,6 +178,12 @@ export function MyTreePanel({
       const node = args.node;
       const action = args.event?.target?.getAttribute?.("data-action") || null;
       if (node) {
+        // Находим реальный объект из treeData
+        const clickedNode = treeData.find((d) => d.id === node.id);
+        if (clickedNode) {
+          // Сохраняем все поля в локальное хранилище
+          localStorage.setItem("clickedNode", JSON.stringify(clickedNode));
+        }
         if (action === "edit") {
           openEditFather();
         } else if (action === "add") {
@@ -256,7 +198,7 @@ export function MyTreePanel({
     return () => {
       destroyTree();
     };
-  }, [onSelectRelative, openTreeModal, openEditFather]);
+  }, [onSelectRelative, openTreeModal, openEditFather, treeData]);
 
   return <div ref={treeRef} style={{ width: "100%", height: "100%" }} />;
 }

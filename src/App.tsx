@@ -1,4 +1,5 @@
-// src/App.tsx
+// App.tsx
+
 import React, { useState, useEffect, useCallback } from "react";
 import bridge, { UserInfo } from "@vkontakte/vk-bridge";
 import {
@@ -27,6 +28,87 @@ import EditFatherModal from "./components/EditFather";
 import AddMediaModal from "./components/AddMediaModal";
 import QRCodeImage from "../src/assets/img/QRcode.svg";
 import FamilyTreeModal from "./components/FamilyTreeModal";
+
+interface MyNodeData {
+  id: number;
+  pids?: number[];
+  fid?: number;
+  mid?: number;
+  name?: string;
+  surname?: string;
+  year?: string;
+  gender?: string;
+  avatarUrl?: string;
+  [key: string]: unknown;
+}
+
+const initialTestData: MyNodeData[] = [
+  {
+    id: 1,
+    pids: [7, 9],
+    name: "Иван",
+    surname: "Иванов",
+    year: "1921",
+    gender: "male",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 9,
+    pids: [1],
+    name: "Султание",
+    surname: "Иванова",
+    year: "1925",
+    gender: "female",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 11,
+    pids: [1],
+    name: "Эльмаз",
+    surname: "Иванова",
+    year: "1925",
+    gender: "female",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 10,
+    pids: [1],
+    name: "Эльмаз",
+    surname: "Иванова",
+    year: "1925",
+    gender: "female",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 7,
+    pids: [1],
+    name: "Эльмаз",
+    surname: "Иванова",
+    year: "1925",
+    gender: "female",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 3,
+    mid: 7,
+    fid: 1,
+    name: "Иван",
+    surname: "Иванов",
+    year: "1950",
+    gender: "male",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+  {
+    id: 2,
+    mid: 7,
+    fid: 1,
+    name: "Мария",
+    surname: "Иванова",
+    year: "1955",
+    gender: "female",
+    avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
+  },
+];
 
 const relativesData = [
   {
@@ -61,11 +143,12 @@ const App: React.FC = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
+  const [treeData, setTreeData] = useState<MyNodeData[]>(initialTestData);
+
   const closeModal = useCallback(() => {
     setActiveModal(null);
   }, []);
 
-  // Обернули функции в useCallback для оптимизации и предотвращения лишних перерендерингов
   const openShareQR = useCallback(() => setActiveModal("share-qr"), []);
   const openAddMedia = useCallback(() => setActiveModal("add-media"), []);
   const openEditFather = useCallback(() => setActiveModal("edit-father"), []);
@@ -78,6 +161,100 @@ const App: React.FC = () => {
     () => setActiveModal("family-tree-modal"),
     []
   );
+
+  // Вызывается при сохранении данных в модалке AddMother
+  const handleSaveMother = useCallback(
+    (motherData: {
+      name: string;
+      surname: string;
+      year: string;
+      gender: string;
+      avatarUrl: string;
+    }) => {
+      const storedStr = localStorage.getItem("clickedNode");
+      if (storedStr) {
+        const storedNode = JSON.parse(storedStr);
+        const newId = Date.now();
+        const newMotherNode: MyNodeData = {
+          id: newId,
+          name: motherData.name,
+          surname: motherData.surname,
+          year: motherData.year,
+          gender: motherData.gender,
+          avatarUrl: motherData.avatarUrl,
+        };
+        setTreeData((prev) =>
+          prev
+            .map((node) =>
+              node.id === storedNode.id ? { ...node, mid: newId } : node
+            )
+            .concat(newMotherNode)
+        );
+      }
+    },
+    [setTreeData]
+  );
+
+  // Вызывается при сохранении данных в модалке AddFather
+  const handleSaveFather = useCallback(
+    (fatherData: {
+      name: string;
+      surname: string;
+      year: string;
+      gender: string;
+      avatarUrl: string;
+    }) => {
+      const storedStr = localStorage.getItem("clickedNode");
+      if (storedStr) {
+        const storedNode = JSON.parse(storedStr);
+        const newId = Date.now();
+        const newFatherNode: MyNodeData = {
+          id: newId,
+          name: fatherData.name,
+          surname: fatherData.surname,
+          year: fatherData.year,
+          gender: fatherData.gender,
+          avatarUrl: fatherData.avatarUrl,
+        };
+        setTreeData((prev) =>
+          prev
+            .map((node) =>
+              node.id === storedNode.id ? { ...node, fid: newId } : node
+            )
+            .concat(newFatherNode)
+        );
+      }
+    },
+    [setTreeData]
+  );
+
+  const handleSelectRelation = useCallback((relation: string) => {
+    // Раньше сразу добавляли, теперь только открываем нужную модалку (или если нужно — добавляем)
+    switch (relation) {
+      case "Добавить папу":
+        setActiveModal("add-father");
+        break;
+      case "Добавить маму":
+        setActiveModal("add-mother");
+        break;
+      case "Добавить брата":
+        setActiveModal("add-father");
+        break;
+      case "Добавить сестру":
+        setActiveModal("add-mother");
+        break;
+      case "Добавить сына":
+        setActiveModal("add-father");
+        break;
+      case "Добавить дочь":
+        setActiveModal("add-mother");
+        break;
+      case "Добавить партнера":
+        break;
+      default:
+        break;
+    }
+  }, []);
 
   const modal = (
     <ModalRoot activeModal={activeModal} onClose={closeModal}>
@@ -113,28 +290,23 @@ const App: React.FC = () => {
       />
 
       <ShareLinkModal id="share-link" onClose={closeModal} />
-      <AddMotherModal id="add-mother" onClose={closeModal} />
-      <AddFatherModal id="add-father" onClose={closeModal} />
+      <AddMotherModal
+        id="add-mother"
+        onClose={closeModal}
+        onSaveMother={handleSaveMother}
+      />
+      <AddFatherModal
+        id="add-father"
+        onClose={closeModal}
+        onSaveFather={handleSaveFather}
+      />
       <EditMotherModal id="edit-mother" onClose={closeModal} />
       <EditFatherModal id="edit-father" onClose={closeModal} />
       <AddMediaModal id="add-media" onClose={closeModal} />
       <FamilyTreeModal
         id="family-tree-modal"
         onClose={closeModal}
-        onSelectRelation={(relation) => {
-          console.log("Выбран тип родственника:", relation);
-          switch (relation) {
-            case "Отец":
-              openAddFather();
-              break;
-            case "Мать":
-              openAddMother();
-              break;
-            // Добавьте остальные случаи по необходимости
-            default:
-              break;
-          }
-        }}
+        onSelectRelation={handleSelectRelation}
       />
     </ModalRoot>
   );
@@ -210,7 +382,6 @@ const App: React.FC = () => {
                   id="my_tree"
                   className="relative-profile"
                   onSelectRelative={(nodeId) => {
-                    console.log("Выбран узел с ID:", nodeId);
                     setSelectedId(nodeId);
                     setActiveModal("relative-profile");
                   }}
@@ -219,6 +390,8 @@ const App: React.FC = () => {
                   openEditMother={openEditMother}
                   openEditFather={openEditFather}
                   openTreeModal={openTreeModal}
+                  treeData={treeData}
+                  setTreeData={setTreeData}
                 />
 
                 <TimelinePanel id={DEFAULT_VIEW_PANELS.TIMELINE} />

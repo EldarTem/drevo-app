@@ -1,3 +1,5 @@
+// FamilyTreeModal.tsx
+
 import React, { useEffect, useRef } from "react";
 import FamilyTree from "@balkangraph/familytree.js";
 import { ModalPage } from "@vkontakte/vkui";
@@ -117,6 +119,18 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
   };
 
   useEffect(() => {
+    const storedData = localStorage.getItem("clickedNode");
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+      const idx = relations.findIndex((r) => r.id === 8);
+      if (idx !== -1) {
+        relations[idx].name = parsed.name || "";
+        relations[idx].surname = parsed.surname || "";
+        relations[idx].year = parsed.year || "";
+        relations[idx].avatarUrl = parsed.avatarUrl || ivanIvanIcon;
+      }
+    }
+
     if (!treeRef.current) return;
     destroyTree();
 
@@ -172,14 +186,14 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
     `;
     ft.customTemplate_male.img_0 = `
       <clipPath id="{clipId}">
-        <circle cx="32.5" cy="48" r="32.5"></circle>
+        <circle cx="32.5" cy="68" r="55" ></circle>
       </clipPath>
       <image
         xlink:href="{val}"
         x="0"
         y="16.5"
-        width="55"
-        height="55"
+        width="65"
+        height="65"
         clip-path="url(#{clipId})"
       />
     `;
@@ -210,6 +224,7 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       <text class="user-add-year" x="5" y="75" text-anchor="start">{val}</text>
     `;
     ft.customTemplate_female.link = ft.customTemplate.link;
+
     const relationData = relations.map((rel) => ({
       ...rel,
       fid: rel.fid ?? undefined,
@@ -244,8 +259,10 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       if (!node) return;
       const found = relations.find((r) => r.id === node.id);
       if (found && found.name) {
+        // Просто вызываем onSelectRelation, а family-tree-modal закроется,
+        // когда в App.tsx сменится activeModal на другую (add-mother / add-father).
+        // То есть onClose() убираем отсюда.
         onSelectRelation(found.name);
-        onClose();
       }
     });
 

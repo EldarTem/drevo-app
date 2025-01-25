@@ -1,3 +1,5 @@
+// AddMotherModal.tsx
+
 import React, { useState, useEffect } from "react";
 import {
   ModalPage,
@@ -17,15 +19,24 @@ import "../styles/appPanel.css";
 interface AddMotherModalProps {
   id: string;
   onClose: () => void;
+  onSaveMother: (motherData: {
+    name: string;
+    surname: string;
+    year: string;
+    gender: string;
+    avatarUrl: string;
+  }) => void;
 }
 
 export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   id,
   onClose,
+  onSaveMother,
 }) => {
   const [isAlive, setIsAlive] = useState(true);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoURL, setPhotoURL] = useState<string | undefined>(undefined);
+
   const [firstName, setFirstName] = useState<string>("Александра");
   const [patronymic, setPatronymic] = useState<string>("Петровна");
   const [maidenName, setMaidenName] = useState<string>("Журавлёва");
@@ -34,11 +45,26 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
   const [yearOfBirth, setYearOfBirth] = useState<string>("");
   const [marriedName, setMarriedName] = useState<string>("Кузьменко");
   const [placeOfBirth, setPlaceOfBirth] = useState<string>("Архангельск");
+
   const [dayOfDeath, setDayOfDeath] = useState<string>("");
   const [monthOfDeath, setMonthOfDeath] = useState<string>("");
   const [yearOfDeath, setYearOfDeath] = useState<string>("");
   const [placeOfBurial, setPlaceOfBurial] = useState<string>("");
+
   const [biography, setBiography] = useState<string>("");
+
+  // Для динамического заголовка
+  const [targetNodeName, setTargetNodeName] = useState<string>("");
+
+  useEffect(() => {
+    const storedStr = localStorage.getItem("clickedNode");
+    if (storedStr) {
+      const parsed = JSON.parse(storedStr);
+      const namePart = parsed.name || "";
+      const surnamePart = parsed.surname || "";
+      setTargetNodeName(`${namePart} ${surnamePart}`.trim());
+    }
+  }, []);
 
   useEffect(() => {
     if (photo) {
@@ -65,7 +91,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
       }
 
       if (selectedFile.size > maxSize) {
-        alert("Размер файла превышает 10MB.");
+        alert("Размер файла превышает 10МБ.");
         return;
       }
 
@@ -83,27 +109,19 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const fullDateOfBirth = `${yearOfBirth.padStart(
-      4,
-      "0"
-    )}-${monthOfBirth.padStart(2, "0")}-${dayOfBirth.padStart(2, "0")}`;
-    const fullDateOfDeath = `${yearOfDeath.padStart(
-      4,
-      "0"
-    )}-${monthOfDeath.padStart(2, "0")}-${dayOfDeath.padStart(2, "0")}`;
-    console.log({
-      photo,
-      isAlive,
-      firstName,
-      patronymic,
-      maidenName,
-      dateOfBirth: fullDateOfBirth,
-      marriedName,
-      placeOfBirth,
-      dateOfDeath: isAlive ? null : fullDateOfDeath,
-      placeOfBurial: isAlive ? null : placeOfBurial,
-      biography,
+
+    // Собираем только основные данные для демонстрации создания узла
+    const motherName = `${firstName}${patronymic ? " " + patronymic : ""}`;
+    const motherYear = yearOfBirth || "1900";
+
+    onSaveMother({
+      name: motherName,
+      surname: marriedName || "Фамилия",
+      year: motherYear,
+      gender: "female",
+      avatarUrl: photoURL || "https://cdn.balkan.app/shared/2.jpg",
     });
+
     onClose();
   };
 
@@ -136,7 +154,9 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
       <form onSubmit={handleSubmit}>
         <Group>
           <Div>
-            <div className="modal-title">Добавить мать для Алексея Иванова</div>
+            <div className="modal-title">
+              Добавить мать для {targetNodeName || "Неизвестно"}
+            </div>
           </Div>
           <Div className="photo-group">
             <Avatar size={113} src={photoURL}>
@@ -153,7 +173,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
                 tabIndex={0}
                 onClick={() => {
                   const fileInput = document.getElementById(
-                    "photo-upload-input"
+                    "photo-upload-input-mother"
                   ) as HTMLInputElement | null;
                   if (fileInput) {
                     fileInput.click();
@@ -162,7 +182,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     const fileInput = document.getElementById(
-                      "photo-upload-input"
+                      "photo-upload-input-mother"
                     ) as HTMLInputElement | null;
                     if (fileInput) {
                       fileInput.click();
@@ -184,7 +204,7 @@ export const AddMotherModal: React.FC<AddMotherModalProps> = ({
                 )}
               </Div>
               <input
-                id="photo-upload-input"
+                id="photo-upload-input-mother"
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 style={{ display: "none" }}
