@@ -250,6 +250,7 @@ const App: React.FC = () => {
         setActiveModal("add-mother");
         break;
       case "Добавить партнера":
+        setActiveModal("add-mother");
         break;
       default:
         break;
