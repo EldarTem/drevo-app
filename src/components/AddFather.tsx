@@ -15,23 +15,22 @@ import {
 } from "@vkontakte/vkui";
 import { Icon24Add, Icon48Camera } from "@vkontakte/icons";
 import "../styles/appPanel.css";
-
+import { MyNodeData } from "../App";
 interface AddFatherModalProps {
   id: string;
   onClose: () => void;
-  onSaveFather: (fatherData: {
-    name: string;
-    surname: string;
-    year: string;
-    gender: string;
-    avatarUrl: string;
-  }) => void;
+  onSaveFather: (fatherData: MyNodeData) => void;
+  onSaveSibling: (siblingData: MyNodeData) => void; // Добавлено
+  onSaveChild: (childData: MyNodeData) => void; // Добавлено
+  selectedRelation: string | null;
 }
-
 export const AddFatherModal: React.FC<AddFatherModalProps> = ({
   id,
   onClose,
   onSaveFather,
+  onSaveSibling,
+  onSaveChild,
+  selectedRelation,
 }) => {
   const [isAlive, setIsAlive] = useState(true);
   const [photo, setPhoto] = useState<File | null>(null);
@@ -52,7 +51,6 @@ export const AddFatherModal: React.FC<AddFatherModalProps> = ({
 
   const [biography, setBiography] = useState<string>("");
 
-  // Для динамического заголовка
   const [targetNodeName, setTargetNodeName] = useState<string>("");
 
   useEffect(() => {
@@ -109,25 +107,49 @@ export const AddFatherModal: React.FC<AddFatherModalProps> = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Собираем только основные данные для демонстрации создания узла
-    const fatherName = `${firstName}${patronymic ? " " + patronymic : ""}`;
-    const fatherYear = yearOfBirth || "1900";
+    const storedStr = localStorage.getItem("clickedNode");
+    if (storedStr) {
+      const storedNode = JSON.parse(storedStr);
+      const newId = Date.now();
 
-    onSaveFather({
-      name: fatherName,
-      surname: marriedName || "Фамилия",
-      year: fatherYear,
-      gender: "male",
-      avatarUrl: photoURL || "https://cdn.balkan.app/shared/2.jpg",
-    });
+      let newNode: MyNodeData = {
+        id: newId,
+        name: firstName,
+        surname: marriedName,
+        year: yearOfBirth,
+        gender: "male",
+        avatarUrl: photoURL || "https://cdn.balkan.app/shared/2.jpg",
+      };
+
+      switch (selectedRelation) {
+        case "Добавить папу":
+          newNode = { ...newNode, gender: "male" };
+          onSaveFather(newNode);
+          break;
+        case "Добавить брата":
+          newNode = {
+            ...newNode,
+            fid: storedNode.fid,
+            mid: storedNode.mid,
+            gender: "male",
+          };
+          onSaveSibling(newNode);
+          break;
+        case "Добавить сына":
+          newNode = {
+            ...newNode,
+            fid: storedNode.id,
+            gender: "male",
+          };
+          onSaveChild(newNode);
+          break;
+        default:
+          break;
+      }
+    }
 
     onClose();
   };
-
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsAlive(e.target.value === "alive");
-  };
-
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = [
     { label: "Январь", value: "01" },
@@ -154,7 +176,8 @@ export const AddFatherModal: React.FC<AddFatherModalProps> = ({
         <Group>
           <Div>
             <div className="modal-title">
-              Добавить отца для {targetNodeName || "Неизвестно"}
+              {selectedRelation || "Неизвестно"} для{" "}
+              {targetNodeName || "Неизвестно"}
             </div>
           </Div>
           <Div className="photo-group">
@@ -301,11 +324,19 @@ export const AddFatherModal: React.FC<AddFatherModalProps> = ({
         </Group>
 
         <Div>
-          <RadioGroup onChange={handleRadioChange} className="radiodiv">
-            <Radio value="alive" checked={isAlive}>
+          <RadioGroup className="radiodiv">
+            <Radio
+              value="alive"
+              checked={isAlive}
+              onChange={() => setIsAlive(true)}
+            >
               Жив
             </Radio>
-            <Radio value="deceased" checked={!isAlive}>
+            <Radio
+              value="deceased"
+              checked={!isAlive}
+              onChange={() => setIsAlive(false)}
+            >
               Умер
             </Radio>
           </RadioGroup>

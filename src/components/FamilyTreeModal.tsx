@@ -54,11 +54,19 @@ interface FamilyTreeTemplates {
 }
 
 const relations: RelationNode[] = [
-  { id: 1, pids: [2], name: "Добавить папу", gender: "", avatarUrl: manavatar },
+  {
+    id: 1,
+    pids: [2],
+    name: "Добавить папу",
+    surname: "",
+    gender: "",
+    avatarUrl: manavatar,
+  },
   {
     id: 2,
     pids: [1],
     name: "Добавить маму",
+    surname: "",
     gender: "",
     avatarUrl: womanavatar,
   },
@@ -66,6 +74,7 @@ const relations: RelationNode[] = [
     id: 7,
     pids: [8],
     name: "Добавить брата",
+    surname: "",
     gender: "",
     avatarUrl: manavatar,
   },
@@ -73,17 +82,32 @@ const relations: RelationNode[] = [
     id: 4,
     pids: [8],
     name: "Добавить сестру",
+    surname: "",
     gender: "",
     avatarUrl: womanavatar,
   },
-  { id: 5, fid: 8, name: "Добавить сына", gender: "", avatarUrl: manavatar },
-  { id: 6, fid: 8, name: "Добавить дочь", gender: "", avatarUrl: womanavatar },
+  {
+    id: 5,
+    fid: 8,
+    name: "Добавить сына",
+    surname: "",
+    gender: "",
+    avatarUrl: manavatar,
+  },
+  {
+    id: 6,
+    fid: 8,
+    name: "Добавить дочь",
+    surname: "",
+    gender: "",
+    avatarUrl: womanavatar,
+  },
   {
     id: 3,
     pids: [8],
     name: "Добавить партнера",
-    year: "Жена, бывшая жена,",
-    year2: "гражданская жена..",
+    surname: "Жена, бывшая жена,",
+    year: "гражданская жена..",
     gender: "female",
   },
   {
@@ -179,24 +203,22 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       " fill="#fff3e0" stroke="#ff6f00" stroke-width="2"></path>
     `;
     ft.customTemplate_male.field_0 = `
-      <text class="user-name" x="125" y="43" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
-    `;
+    <text class="user-name" x="120" y="40" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
+  `;
     ft.customTemplate_male.field_1 = `
-      <text class="user-year" x="100" y="70" text-anchor="start">{val}</text>
-    `;
+    <text class="user-name" x="130" y="60" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
+  `;
+    ft.customTemplate_male.field_2 = `
+    <text class="user-year" x="100" y="80" text-anchor="start">{val}</text>
+  `;
     ft.customTemplate_male.img_0 = `
-      <clipPath id="{clipId}">
-        <circle cx="32.5" cy="68" r="55" ></circle>
+    <g transform="translate(-10, -12)"> 
+      <clipPath id="avatarClip">
+        <circle cx="45" cy="60" r="40"></circle>
       </clipPath>
-      <image
-        xlink:href="{val}"
-        x="0"
-        y="16.5"
-        width="65"
-        height="65"
-        clip-path="url(#{clipId})"
-      />
-    `;
+      <image xlink:href="{val}" x="-5" y="5" width="100" height="100" clip-path="url(#avatarClip)" />
+    </g>
+  `;
     ft.customTemplate_male.link = ft.customTemplate.link;
 
     ft.customTemplate_female = { ...ft.customTemplate };
@@ -215,14 +237,14 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       " fill="#fff3e0" stroke="#ff6f00" stroke-width="2"></path>
     `;
     ft.customTemplate_female.field_0 = `
-      <text class="user-add-name" x="83" y="30" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
-    `;
+    <text class="user-add-name" x="82" y="30" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
+  `;
     ft.customTemplate_female.field_1 = `
-      <text class="user-add-year" x="5" y="55" text-anchor="start">{val}</text>
-    `;
+    <text class="user-add-year" x="78" y="55" text-anchor="middle" fill="#333" font-size="12px">{val}</text>
+  `;
     ft.customTemplate_female.field_2 = `
-      <text class="user-add-year" x="5" y="75" text-anchor="start">{val}</text>
-    `;
+    <text class="user-add-year" x="5" y="75" text-anchor="start">{val}</text>
+  `;
     ft.customTemplate_female.link = ft.customTemplate.link;
 
     const relationData = relations.map((rel) => ({
@@ -230,7 +252,7 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       fid: rel.fid ?? undefined,
       mid: rel.mid ?? undefined,
       pids: rel.pids ?? [],
-      name: rel.name ? `${rel.name} ${rel.surname || ""}` : "",
+      name: rel.name ? `${rel.name}` : "",
     }));
 
     const family = new FamilyTree(treeRef.current, {
@@ -238,8 +260,8 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       nodes: relationData,
       nodeBinding: {
         field_0: "name",
-        field_1: "year",
-        field_2: "year2",
+        field_1: "surname",
+        field_2: "year",
         img_0: "avatarUrl",
       },
       mode: "light",
@@ -259,10 +281,7 @@ const FamilyTreeModal: React.FC<FamilyTreeModalProps> = ({
       if (!node) return;
       const found = relations.find((r) => r.id === node.id);
       if (found && found.name) {
-        // Просто вызываем onSelectRelation, а family-tree-modal закроется,
-        // когда в App.tsx сменится activeModal на другую (add-mother / add-father).
-        // То есть onClose() убираем отсюда.
-        onSelectRelation(found.name);
+        onSelectRelation(found.name); // Передаём название роли
       }
     });
 

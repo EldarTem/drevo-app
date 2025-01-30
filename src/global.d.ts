@@ -22,6 +22,7 @@ declare module "@balkangraph/familytree.js" {
     };
     nodeBinding?: {
       field_0?: string;
+      
       field_1?: string;
       field_2?: string;
       img_0?: string;

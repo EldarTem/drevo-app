@@ -1,5 +1,14 @@
+// RelativeProfileModal.tsx
+
 import React, { useState } from "react";
-import { ModalPage, Group, Div, Avatar } from "@vkontakte/vkui";
+import {
+  ModalPage,
+  Group,
+  Div,
+  Avatar,
+  Alert,
+  Snackbar,
+} from "@vkontakte/vkui";
 import {
   Icon16Add,
   Icon16DropdownFlipped,
@@ -9,6 +18,7 @@ import {
   Icon28ViewOutline,
   Icon28QrCodeOutline,
   Icon16Cancel,
+  Icon28CheckCircleOutline, // Используем только необходимые иконки
 } from "@vkontakte/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -19,6 +29,7 @@ import "../styles/RelativeProfileModal.css";
 import Image1 from "../assets/img/image1.png";
 import Image2 from "../assets/img/image2.png";
 import Image3 from "../assets/img/image3.png";
+
 interface RelativeProfileModalProps {
   id: string;
   onClose: () => void;
@@ -31,10 +42,12 @@ interface RelativeProfileModalProps {
     openShareQR: () => void;
     openAddMedia: () => void;
     openEditFather: () => void;
+    openAddEvent: () => void;
   } | null;
   openShareQR: () => void;
   openAddMedia: () => void;
   openEditFather: () => void;
+  openAddEvent: () => void;
 }
 
 const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
@@ -43,9 +56,13 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
   openShareQR,
   openAddMedia,
   openEditFather,
+  openAddEvent,
 }) => {
   const [isRelativesVisible, setIsRelativesVisible] = useState(true);
   const [isTextExpanded, setIsTextExpanded] = useState(false);
+
+  const [alert, setAlert] = useState<React.ReactElement | null>(null); // Состояние для Alert
+  const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null); // Состояние для Snackbar
 
   const routeNavigator = useRouteNavigator();
 
@@ -117,6 +134,48 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
     },
   ];
 
+  // Функция для открытия Alert подтверждения удаления
+  const openDeletionAlert = () => {
+    if (alert) return; // Предотвращаем открытие нескольких Alert
+
+    setAlert(
+      <Alert
+        actions={[
+          {
+            title: "Отмена",
+            mode: "cancel",
+          },
+          {
+            title: "Удалить",
+            mode: "destructive",
+            action: () => {
+              // Здесь вы можете добавить логику удаления
+              console.log("Документ удален.");
+              setAlert(null); // Закрываем Alert после действия
+              // Показываем Snackbar с уведомлением об успешном удалении
+              setSnackbar(
+                <Snackbar
+                  onClose={() => setSnackbar(null)}
+                  before={
+                    <Icon28CheckCircleOutline fill="var(--vkui--color_icon_positive)" />
+                  }
+                >
+                  Профиль успешно удален
+                </Snackbar>
+              );
+              onClose(); // Закрываем модалку после удаления
+            },
+          },
+        ]}
+        actionsLayout="horizontal"
+        dismissButtonMode="inside"
+        onClose={() => setAlert(null)}
+        header="Удаление профиля" // Изменено с 'title' на 'header'
+        text="Вы уверены, что хотите удалить этот профиль?" // Используем 'text'
+      />
+    );
+  };
+
   return (
     <ModalPage
       id={id}
@@ -159,7 +218,7 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
           </button>
           <button
             className="delete-button"
-            onClick={() => console.log("Удалить")}
+            onClick={openDeletionAlert} // Изменили обработчик на открытие Alert
           >
             Удалить
           </button>
@@ -242,7 +301,9 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
           <div className="section-group">
             <h2 className="section-title">События из жизни</h2>
           </div>
-          <button className="life-event-add">Добавить событие</button>
+          <button className="life-event-add" onClick={openAddEvent}>
+            Добавить событие
+          </button>
           {lifeEvents.map((event, index) => (
             <div className="life-event" key={index}>
               <div className="life-exent-header">
@@ -314,6 +375,12 @@ const RelativeProfileModal: React.FC<RelativeProfileModalProps> = ({
           ))}
         </Div>
       </Group>
+
+      {/* Рендеринг Alert, если он активен */}
+      {alert}
+
+      {/* Рендеринг Snackbar, если он активен */}
+      {snackbar}
     </ModalPage>
   );
 };

@@ -98,11 +98,14 @@ export function MyTreePanel({
       </g>
     `;
     ftTemplates.myTemplate_male.field_0 = `
-      <text class="user-name" x="120" y="55" text-anchor="start">{val}</text>
-    `;
+    <text class="user-name" x="110" y="55" text-anchor="start">{val}</text>
+  `;
     ftTemplates.myTemplate_male.field_1 = `
-      <text class="user-year" x="120" y="75" text-anchor="start">{val}</text>
-    `;
+    <text class="user-name" x="110" y="75" text-anchor="start">{val}</text>
+  `;
+    ftTemplates.myTemplate_male.field_2 = `
+    <text class="user-year" x="110" y="95" text-anchor="start">{val}</text>
+  `;
     ftTemplates.myTemplate_male.img_0 = `
       <clipPath id="avatarClip">
         <circle cx="45" cy="60" r="40"></circle>
@@ -136,11 +139,14 @@ export function MyTreePanel({
       </g>
     `;
     ftTemplates.myTemplate_female.field_0 = `
-      <text class="user-name" x="120" y="55" text-anchor="start">{val}</text>
-    `;
+    <text class="user-name" x="110" y="55" text-anchor="start">{val}</text>
+  `;
     ftTemplates.myTemplate_female.field_1 = `
-      <text class="user-year" x="120" y="75" text-anchor="start">{val}</text>
-    `;
+    <text class="user-name" x="110" y="75" text-anchor="start">{val}</text>
+  `;
+    ftTemplates.myTemplate_female.field_2 = `
+    <text class="user-year" x="110" y="95" text-anchor="start">{val}</text>
+  `;
     ftTemplates.myTemplate_female.img_0 = `
       <clipPath id="avatarClip">
         <circle cx="45" cy="60" r="40"></circle>
@@ -157,7 +163,8 @@ export function MyTreePanel({
       nodes: treeData,
       nodeBinding: {
         field_0: "name",
-        field_1: "year",
+        field_1: "surname",
+        field_2: "year",
         img_0: "avatarUrl",
       },
       mode: "light",
@@ -178,10 +185,8 @@ export function MyTreePanel({
       const node = args.node;
       const action = args.event?.target?.getAttribute?.("data-action") || null;
       if (node) {
-        // Находим реальный объект из treeData
         const clickedNode = treeData.find((d) => d.id === node.id);
         if (clickedNode) {
-          // Сохраняем все поля в локальное хранилище
           localStorage.setItem("clickedNode", JSON.stringify(clickedNode));
         }
         if (action === "edit") {

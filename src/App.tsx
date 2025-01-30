@@ -29,7 +29,7 @@ import AddMediaModal from "./components/AddMediaModal";
 import QRCodeImage from "../src/assets/img/QRcode.svg";
 import FamilyTreeModal from "./components/FamilyTreeModal";
 
-interface MyNodeData {
+export interface MyNodeData {
   id: number;
   pids?: number[];
   fid?: number;
@@ -113,7 +113,7 @@ const initialTestData: MyNodeData[] = [
 const relativesData = [
   {
     id: 1,
-    name: "Иван Иванов",
+    name: "Иван",
     year: "1921",
     avatarUrl: "https://cdn.balkan.app/shared/2.jpg",
   },
@@ -144,6 +144,7 @@ const App: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const [treeData, setTreeData] = useState<MyNodeData[]>(initialTestData);
+  const [selectedRelation, setSelectedRelation] = useState<string | null>(null);
 
   const closeModal = useCallback(() => {
     setActiveModal(null);
@@ -162,74 +163,78 @@ const App: React.FC = () => {
     []
   );
 
-  // Вызывается при сохранении данных в модалке AddMother
   const handleSaveMother = useCallback(
-    (motherData: {
-      name: string;
-      surname: string;
-      year: string;
-      gender: string;
-      avatarUrl: string;
-    }) => {
+    (motherData: MyNodeData) => {
       const storedStr = localStorage.getItem("clickedNode");
       if (storedStr) {
         const storedNode = JSON.parse(storedStr);
-        const newId = Date.now();
-        const newMotherNode: MyNodeData = {
-          id: newId,
-          name: motherData.name,
-          surname: motherData.surname,
-          year: motherData.year,
-          gender: motherData.gender,
-          avatarUrl: motherData.avatarUrl,
-        };
         setTreeData((prev) =>
           prev
             .map((node) =>
-              node.id === storedNode.id ? { ...node, mid: newId } : node
+              node.id === storedNode.id ? { ...node, mid: motherData.id } : node
             )
-            .concat(newMotherNode)
+            .concat(motherData)
         );
       }
     },
     [setTreeData]
   );
 
-  // Вызывается при сохранении данных в модалке AddFather
   const handleSaveFather = useCallback(
-    (fatherData: {
-      name: string;
-      surname: string;
-      year: string;
-      gender: string;
-      avatarUrl: string;
-    }) => {
+    (fatherData: MyNodeData) => {
       const storedStr = localStorage.getItem("clickedNode");
       if (storedStr) {
         const storedNode = JSON.parse(storedStr);
-        const newId = Date.now();
-        const newFatherNode: MyNodeData = {
-          id: newId,
-          name: fatherData.name,
-          surname: fatherData.surname,
-          year: fatherData.year,
-          gender: fatherData.gender,
-          avatarUrl: fatherData.avatarUrl,
-        };
         setTreeData((prev) =>
           prev
             .map((node) =>
-              node.id === storedNode.id ? { ...node, fid: newId } : node
+              node.id === storedNode.id ? { ...node, fid: fatherData.id } : node
             )
-            .concat(newFatherNode)
+            .concat(fatherData)
         );
       }
     },
     [setTreeData]
   );
 
+  const handleSaveSibling = useCallback(
+    (siblingData: MyNodeData) => {
+      const storedStr = localStorage.getItem("clickedNode");
+      if (storedStr) {
+        const storedNode = JSON.parse(storedStr);
+        const newId = Date.now();
+        const newSiblingNode: MyNodeData = {
+          ...siblingData,
+          id: newId,
+          fid: storedNode.fid, // Используем storedNode
+          mid: storedNode.mid, // Используем storedNode
+        };
+
+        setTreeData((prev) => prev.concat(newSiblingNode));
+      }
+    },
+    [setTreeData]
+  );
+
+  const handleSaveChild = useCallback(
+    (childData: MyNodeData) => {
+      const storedStr = localStorage.getItem("clickedNode");
+      if (storedStr) {
+        const storedNode = JSON.parse(storedStr);
+        const newId = Date.now();
+        const newChildNode: MyNodeData = {
+          ...childData,
+          id: newId,
+          fid: storedNode.id, // Используем storedNode
+        };
+
+        setTreeData((prev) => prev.concat(newChildNode));
+      }
+    },
+    [setTreeData]
+  );
   const handleSelectRelation = useCallback((relation: string) => {
-    // Раньше сразу добавляли, теперь только открываем нужную модалку (или если нужно — добавляем)
+    setSelectedRelation(relation); // Сохраняем выбранную роль
     switch (relation) {
       case "Добавить папу":
         setActiveModal("add-father");
@@ -238,10 +243,10 @@ const App: React.FC = () => {
         setActiveModal("add-mother");
         break;
       case "Добавить брата":
-        setActiveModal("add-father");
+        setActiveModal("add-mother"); // Возможно, здесь ошибка
         break;
       case "Добавить сестру":
-        setActiveModal("add-mother");
+        setActiveModal("add-mother"); // Возможно, здесь ошибка
         break;
       case "Добавить сына":
         setActiveModal("add-father");
@@ -274,12 +279,14 @@ const App: React.FC = () => {
                 openShareQR: openShareQR,
                 openAddMedia: openAddMedia,
                 openEditFather: openEditFather,
+                openAddEvent: openAddEvent,
               }
             : null
         }
         openShareQR={openShareQR}
         openAddMedia={openAddMedia}
         openEditFather={openEditFather}
+        openAddEvent={openAddEvent}
       />
 
       <AddEventModal id="add-event" onClose={closeModal} />
@@ -295,12 +302,20 @@ const App: React.FC = () => {
         id="add-mother"
         onClose={closeModal}
         onSaveMother={handleSaveMother}
+        onSaveSibling={handleSaveSibling}
+        onSaveChild={handleSaveChild}
+        selectedRelation={selectedRelation}
       />
+
       <AddFatherModal
         id="add-father"
         onClose={closeModal}
         onSaveFather={handleSaveFather}
+        onSaveSibling={handleSaveSibling}
+        onSaveChild={handleSaveChild}
+        selectedRelation={selectedRelation}
       />
+
       <EditMotherModal id="edit-mother" onClose={closeModal} />
       <EditFatherModal id="edit-father" onClose={closeModal} />
       <AddMediaModal id="add-media" onClose={closeModal} />

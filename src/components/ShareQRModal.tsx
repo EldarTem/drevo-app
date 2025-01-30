@@ -1,5 +1,14 @@
-import React from "react";
-import { ModalCard, Button, FormItem, Input, Separator } from "@vkontakte/vkui";
+import React, { useState } from "react";
+import {
+  ModalCard,
+  Button,
+  FormItem,
+  Input,
+  Separator,
+  Snackbar,
+} from "@vkontakte/vkui";
+
+import { Icon28CheckCircleOutline } from "@vkontakte/icons"; // Импортируем нужные иконки
 import "../styles/modal.css";
 interface ShareQRModalProps {
   id: string;
@@ -12,6 +21,29 @@ const ShareQRModal: React.FC<ShareQRModalProps> = ({
   onClose,
   qrCodeUrl,
 }) => {
+  const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
+  const handleCopy = () => {
+    const link = "https://www.myheritage.com/research";
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        // Открываем Snackbar после успешного копирования
+        setSnackbar(
+          <Snackbar
+            onClose={() => setSnackbar(null)}
+            before={
+              <Icon28CheckCircleOutline fill="var(--vkui--color_icon_positive)" />
+            }
+          >
+            Ссылка скопирована
+          </Snackbar>
+        );
+      })
+      .catch((err) => {
+        console.error("Ошибка копирования: ", err);
+        // Можно добавить Snackbar для ошибки, если необходимо
+      });
+  };
   return (
     <ModalCard
       id={id}
@@ -40,12 +72,12 @@ const ShareQRModal: React.FC<ShareQRModalProps> = ({
           className="modal-input-two-input"
           value="https://www.myheritage.com/research"
         />
-        <Button className="button-modal" size="m">
+        <Button className="button-modal" size="m" onClick={handleCopy}>
           Скопировать
         </Button>
       </FormItem>
       <Separator />
-      <FormItem className="form-item-qr"      >
+      <FormItem className="form-item-qr">
         <Button size="l" mode="secondary" className="button-modal-two">
           Заказать изготовление
         </Button>
@@ -53,6 +85,7 @@ const ShareQRModal: React.FC<ShareQRModalProps> = ({
           Скачать QR код
         </Button>
       </FormItem>
+      {snackbar}
     </ModalCard>
   );
 };
